@@ -1,0 +1,222 @@
+<div class="grid container-fluid">
+  <div class="col-12">
+
+    <p-toast key="account"></p-toast>
+    <div class="card">
+      <h1 style="text-align: center; color: brown;">Employee Details</h1>
+      <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+
+
+        <p-toolbar class="p-4 mt-4">
+          <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+
+            <!-- New Button -->
+            <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="clear()">
+            </button>
+            <!-- Save Button -->
+            <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+              class="p-button-success mr-2" (click)="Save()">
+              Save
+            </button>
+            <!-- Update -->
+            <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger mr-2"
+              (click)="OpenDilag()">
+              Update
+            </button>
+            <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true" showEffect="fade"
+              [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+              <span>Are You show You want to Update the Record?</span>
+              <div class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                <div>
+                  <p-button pButton label="Yes" type="button" class="p-button-success p-button"
+                    (click)="Update()">Update
+                  </p-button>
+                  <p-button class="ml-1" label="No" type="button" styleClass="p-button p-button-danger"
+                    (click)="CloseDialag()">
+                  </p-button>
+                </div>
+              </div>
+            </p-dialog>
+
+
+            <!-- Delete Button -->
+            <button pButton type="button" pTooltip="Delete" tooltipPosition="top" class="p-button-warning mr-2"
+              (click)="openDialog()">
+              Delete
+
+
+            </button>
+            <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true" showEffect="fade"
+              [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+              <span>Are You show You want to delete the Record?</span>
+              <div class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                <div>
+                  <p-button pButton label="Yes" type="button" class="p-button-success p-button"
+                    (click)="delete()">Delete
+                  </p-button>
+                  <p-button class="ml-1" label="No" type="button" styleClass="p-button p-button-danger"
+                    (click)="closeDialog()">
+                  </p-button>
+
+                </div>
+              </div>
+            </p-dialog>
+
+            <p-toolbar classstyle="width: 100%;">
+              <div class="p-toolbar-group-right flex justify-content-end w-full">
+                <!-- ID -->
+                <button pButton type="button" pTooltip="Details" tooltipPosition="top" icon="pi pi-check"
+                  class="p-button-success mr-2" (click)="Details()">
+                  Check(Id)
+                </button>
+
+                <!-- Get All Information -->
+                <button pButton type="button" pTooltip="Details" tooltipPosition="top" icon="pi pi-check"
+                  class="p-button-success" (click)="DetailsAllInfo()">
+                  Check(FullEmployeeDetails)
+                </button>
+              </div>
+            </p-toolbar>
+          </div>
+        </p-toolbar>
+
+
+        <p-dialog header="Employee Details" [(visible)]="displayPopup" [modal]="true" [closable]="true"
+          [style]="{width: '600px'}">
+
+          <h4>Basic Info</h4>
+          <p *ngIf="dtEmployee.length > 0">
+            Name: {{dtEmployee[0].Name}} <br>
+            Company ID: {{dtEmployee[0].CompanyId}} <br>
+            Age: {{dtEmployee[0].Age}} <br>
+            Email: {{dtEmployee[0].Email}}
+          </p>
+
+          <h4>Status</h4>
+          <p *ngIf="dtStatus.length > 0">
+            Phone: {{dtStatus[0].PhoneNumber}} <br>
+            Qualification: {{dtStatus[0].Qualification}} <br>
+            Department: {{dtStatus[0].Department}}
+          </p>
+
+          <h4>Address</h4>
+          <p *ngIf="dtadress.length > 0">
+            {{dtadress[0].Address1}}, {{dtadress[0].Address2}}, {{dtadress[0].City}}, {{dtadress[0].State}},
+            {{dtadress[0].Country}} - {{dtadress[0].Pincode}}
+          </p>
+
+        </p-dialog>
+
+
+        <form [formGroup]="EmployeeForm" autocomplete="off">
+          <div class="grid p-fluid">
+            <!-- Left Column -->
+            <div class="col-12 md:col-6">
+              <div class="mb-3">
+
+                <span class="p-float-label w-100">
+                  <input type="text" pInputText id="CompanyId" formControlName="CompanyId" class="form-control"
+                    [readOnly]="isUpdateMode" (focus)="ShowMessage()" [class.p-filled]="EmployeeForm.get('CompanyId')?.value"/>
+                  <label for="CompanyId">Company Id</label>
+                </span>
+                <div *ngIf="EmployeeForm.get('CompanyId')?.invalid && EmployeeForm.get('CompanyId')?.touched"
+                  class="text-danger mt-1 fst-normal">
+                  Please Enter Company Id
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+              <div class="mb-3">
+                <span class="p-float-label w-100">
+                  <input type="text" pInputText id="Name" formControlName="Name" class="form-control"
+                    [readOnly]="isUpdateMode" (focus)="ShowMessage()" [class.p-filled]="EmployeeForm.get('Name')?.value"/>
+                  <label for="Name">Name</label>
+                </span>
+                <div *ngIf="EmployeeForm.get('Name')?.invalid && EmployeeForm.get('Name')?.touched"
+                  class="text-danger mt-1 fst-normal">
+                  Please Enter Name
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-12 md:col-6">
+              <div class="mb-3">
+                <span class="p-float-label w-100">
+                  <input type="text" pInputText id="Age" formControlName="Age" class="form-control" [class.p-filled]="EmployeeForm.get('Age')?.value"/>
+                  <label for="Age">Age</label>
+                </span>
+                <div *ngIf="EmployeeForm.get('Age')?.invalid && EmployeeForm.get('Age')?.touched"
+                  class="text-danger mt-1 fst-normal">
+                  Please Enter Age
+                </div>
+              </div>
+            </div>
+            <div class="col-12 md:col-6 ">
+              <div class="mb-3">
+                <span class="p-float-label w-100">
+                  <p-floatLabel>
+                    <input type="text" pInputText id="Email" formControlName="Email" class="form-control" [class.p-filled]="EmployeeForm.get('Email')?.value"/>
+                    <label for="Email">Email</label>
+                  </p-floatLabel>
+                </span>
+                <div *ngIf="EmployeeForm.get('Email')?.invalid && EmployeeForm.get('Email')?.touched"
+                  class="text-danger mt-1 fst-normal">
+                  Please Enter Email
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+
+        <p-accordionTab header="EmployeeDetails">
+          <p-table #dt1 [value]="dtEmployee" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[10,15,20,25,30,40]"
+            [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+            selectionMode="single" [(selection)]="SelectedRecord" dataKey="Id"
+            [globalFilterFields]="['Name','CompanyId',]" [rowHover]="true" (onRowSelect)="onRowSelect($event)"
+            styleClass="p-datatable-gridlines">
+
+            <ng-template pTemplate="caption">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)" placeholder="Search" />
+              </span>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="Name">Name <p-sortIcon field="Name"></p-sortIcon></th>
+                <th pSortableColumn="CompanyId">Company Id <p-sortIcon field="CompanyId"></p-sortIcon></th>
+                <th pSortableColumn="Age">Age <p-sortIcon field="Age"></p-sortIcon></th>
+                <th pSortableColumn="Email">Email <p-sortIcon field="Email"></p-sortIcon></th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-emp>
+              <tr [pSelectableRow]="emp">
+                <td>{{ emp.Name }}</td>
+                <td>{{ emp.CompanyId }}</td>
+                <td>{{ emp.Age }}</td>
+                <td>{{ emp.Email }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+  </div>
+</div>
+<div style="text-align: right;">
+  <button pButton 
+          type="button"
+          pTooltip="Next"
+          tooltipPosition="right"
+          appendTo="body"
+          class="p-button-success mr-2"
+          (click)="Next()">
+    Next
+  </button>
+</div>

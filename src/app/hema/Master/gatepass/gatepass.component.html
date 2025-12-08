@@ -1,0 +1,287 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: brown;">Employee Gate Pass</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+
+                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
+                        </button>
+                        <!-- Save -->
+                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Save()">
+                            Save
+                        </button>
+                        <!-- Update -->
+                        <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger"
+                            (click)="OpenDailog()">
+                            Update
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to Update the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <p-button pButton type="button" class="p-button-success mr-2" (click)="Update()">
+                                    Update
+                                </p-button>
+                                <p-button pButton type="button" class="p-button-danger mr-2" (click)="CloseDailog()">No
+                                </p-button>
+                            </div>
+                        </p-dialog>
+                          <button pButton type="button" pTooltip="Status" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Details()">
+                            GatePass Status
+                        </button>
+                        
+                    </div>
+                </p-toolbar>
+                <!-- Forms -->
+                <form [formGroup]="gatepassform" autocomplete="off">
+                    <div class="grid p-fluid">
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="CompId" formControlName="CompId"
+                                        class="form-control" [readOnly]="isupdatemode" (focus)="ShowMessage()" [class.p-filled]="gatepassform.get('CompId')?.value"/>
+                                    <label for="CompId">Company Id</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('CompId')?.invalid && gatepassform.get('CompId')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Company Id
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="EmployeeName" formControlName="EmployeeName"
+                                        class="form-control" [readOnly]="isupdatemode" (focus)="ShowMessage()" [class.p-filled]="gatepassform.get('EmployeeName')?.value" />
+                                    <label for="EmployeeName">Name</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('EmployeeName')?.invalid && gatepassform.get('EmployeeName')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Name
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Reason" formControlName="Reason"
+                                        class="form-control" [class.p-filled]="gatepassform.get('Reason')?.value"/>
+                                    <label for="Reason">Reason</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('Reason')?.invalid && gatepassform.get('Reason')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Reason
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Status" formControlName="Status"
+                                        class="form-control" readonly [class.p-filled]="gatepassform.get('Status')?.value"/>
+                                    <label for="Status">Status</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('Status')?.invalid && gatepassform.get('Status')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Status
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="DateTime" [showTime]="true"
+                                        hourFormat="24">
+                                    </p-calendar>
+                                    <label for="date">DateTime</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('DateTime')?.invalid && gatepassform.get('DateTime')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter DateTime
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="CreatedDate" [showTime]="true"
+                                        hourFormat="24">
+                                    </p-calendar>
+                                    <label for="date">CreatedDate</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('CreatedDate')?.invalid && gatepassform.get('CreatedDate')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter CreatedDate
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="UpdatedDate" [showTime]="true"
+                                        hourFormat="24">
+                                    </p-calendar>
+                                    <label for="date">UpdatedDate</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('UpdatedDate')?.invalid && gatepassform.get('UpdatedDate')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter UpdatedDate
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="ReturningOn">
+                                    </p-calendar>
+                                    <label for="ReturningOn">ReturningOn</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('ReturningOn')?.invalid && gatepassform.get('ReturningOn')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter ReturningOn
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="InTime">
+                                    </p-calendar>
+                                    <label for="date">InTime</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('InTime')?.invalid && gatepassform.get('InTime')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter InTime
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100 ">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="OutTime" [showTime]="true"
+                                        hourFormat="24">
+                                    </p-calendar>
+                                    <label for="date">OutTime</label>
+                                </span>
+                                <div *ngIf="gatepassform.get('OutTime')?.invalid && gatepassform.get('OutTime')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter OutTime
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 p-4">
+                            <div class="mb-3 gap-2" style="margin-bottom: 40px; display: flex; flex-direction: column;">
+                                <span class="p-float-label w-100">
+                                    <input type="checkbox" id="IsPersonal" formControlName="IsPersonal" [class.p-filled]="gatepassform.get('IsPersonal')?.value"/>
+                                    <label for="IsPersonal">Is Personal</label>
+                                </span>
+                                <span class="p-float-label w-100">
+                                    <input type="checkbox" id="IsReturning" formControlName="IsReturning" />
+                                    <label for="IsReturning">IsReturning</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <p-dialog header="Leave Status" [(visible)]="showStatusDialog" [modal]="true" [closable]="true">
+                    <div class="text-center p-3">
+                        <h3>Employee: {{ selectedEmpName }}</h3>
+                        <p>Status: <strong>{{ selectedGatePass }}</strong></p>
+                        <p *ngIf="selectedGatePass === 'Approved'" style="color:green;">This GatePass has been approved.
+                        </p>
+                        <p *ngIf="selectedGatePass === 'Rejected'" style="color:red;">This GatePass has been rejected.
+                        </p>
+                        <p *ngIf="selectedGatePass === 'Pending'" style="color:orange;">This GatePass is still pending.
+                        </p>
+                    </div>
+                    <p-footer>
+                        <button pButton type="button" label="Close" (click)="showStatusDialog=false"
+                            class="p-button-secondary"></button>
+                    </p-footer>
+                </p-dialog>
+
+                <!-- Filter -->
+                <p-accordionTab header="GatePassDetail">
+                    <p-table #dt1 [value]="dtgatepass" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['CompId','EmployeeName']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect()" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="CompId">CompId <p-sortIcon field="CompId"></p-sortIcon></th>
+                                <th pSortableColumn="EmployeeName">EmployeeName <p-sortIcon
+                                        field="EmployeeName"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="Reason">Reason <p-sortIcon field="Reason"></p-sortIcon></th>
+                                <th pSortableColumn="Status">Status <p-sortIcon field="Status"></p-sortIcon></th>
+                                <th pSortableColumn="DateTime">DateTime <p-sortIcon field="DateTime"></p-sortIcon></th>
+                                <th pSortableColumn="CreatedDate">CreatedDate <p-sortIcon
+                                        field="CreatedDate"></p-sortIcon></th>
+                                <th pSortableColumn="UpdatedDate">UpdatedDate <p-sortIcon
+                                        field="UpdatedDate"></p-sortIcon></th>
+                                <th pSortableColumn="ReturningOn">ReturningOn <p-sortIcon
+                                        field="ReturningOn"></p-sortIcon></th>
+                                <th pSortableColumn="IsPersonal">IsPersonal <p-sortIcon field="IsPersonal"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="IsReturning">IsReturning <p-sortIcon
+                                        field="IsReturning"></p-sortIcon></th>
+                                <th pSortableColumn="InTime">InTime <p-sortIcon field="InTime"></p-sortIcon></th>
+                                <th pSortableColumn="OutTime">OutTime <p-sortIcon field="OutTime"></p-sortIcon></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+                                <td>{{ emp.CompId }}</td>
+                                <td>{{ emp.EmployeeName }}</td>
+                                <td>{{ emp.Reason }}</td>
+                                <td>{{ emp.Status }}</td>
+                                <td>{{ emp.DateTime }}</td>
+                                <td>{{ emp.CreatedDate }}</td>
+                                <td>{{ emp.UpdatedDate }}</td>
+                                <td>{{ emp.ReturningOn }}</td>
+                                <td>{{ emp.IsPersonal }}</td>
+                                <td>{{ emp.IsReturning }}</td>
+                                <td>{{ emp.InTime }}</td>
+                                <td>{{ emp.OutTime }}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+
+            </p-accordion>
+        </div>
+    </div>
+</div>

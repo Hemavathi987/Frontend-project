@@ -1,0 +1,203 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: brown;">Status Employee</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+                        <!-- New -->
+                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
+                        </button>
+                        <!-- Save -->
+                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Save()">
+                            Save
+                        </button>
+                        <!-- Update -->
+                        <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger"
+                            (click)="OpenDailog()">
+                            Update
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to Update the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <p-button pButton type="button" class="p-button-success mr-2" (click)="Update()">
+                                    Update
+                                </p-button>
+                                <p-button pButton type="button" class="p-button-danger mr-2" (click)="CloseDailog()">No
+                                </p-button>
+                            </div>
+                        </p-dialog>
+                        <!-- Delete -->
+                        <button pButton type="button" pTooltip="Delete" tooltipPosition="top"
+                            class="p-button-danger mr-2" (click)="OpenDeleteDailog()">
+                            Delete
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to delete the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <div>
+                                    <p-button pButton type="button" class="p-button-danger mr-2" (click)="Delete()">
+                                        Delete
+                                    </p-button>
+                                    <p-button pButton type="button" class="p-button-danger mr-2"
+                                        (click)="CloseDeleteDailog()">
+                                        No
+                                    </p-button>
+                                </div>
+                            </div>
+                        </p-dialog>
+                    </div>
+                </p-toolbar>
+
+                 <form [formGroup]="StatusValid" autocomplete="off">
+                    <div class="grid p-fluid"> <!-- ✅ Must have this wrapper -->
+
+                        <!-- LEFT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
+                                        class="form-control"  [readOnly]="isupdatemode" (focus)="showmessage()" [class.p-filled]="StatusValid.get('CompanyId')?.value" />
+                                    <label for="CompanyId">Company Id</label>
+                                </span>
+                                <div *ngIf="StatusValid.get('CompanyId')?.invalid && StatusValid.get('CompanyId')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Company Id
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="EmpName" formControlName="EmpName"
+                                        class="form-control" [readOnly]="isupdatemode" (focus)="showmessage()"
+                                         [class.p-filled]="StatusValid.get('EmpName')?.value" />
+                                    <label for="EmpName">Name</label>
+                                </span>
+                                <div *ngIf="StatusValid.get('EmpName')?.invalid && StatusValid.get('EmpName')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Name
+                                </div>
+                            </div>
+                        </div>
+                          <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="PhoneNumber" formControlName="PhoneNumber"
+                                        class="form-control" [class.p-filled]="StatusValid.get('PhoneNumber')?.value"/>
+                                    <label for="CompanyId">PhoneNumber</label>
+                                </span>
+                                <div *ngIf="StatusValid.get('PhoneNumber')?.invalid && StatusValid.get('PhoneNumber')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter PhoneNumber
+                                </div>
+                            </div>
+                        </div>
+                          <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Qualification" formControlName="Qualification"
+                                        class="form-control"  [class.p-filled]="StatusValid.get('Qualification')?.value"/>
+                                    <label for="Qualification">Qualification</label>
+                                </span>
+                                <div *ngIf="StatusValid.get('Qualification')?.invalid && StatusValid.get('Qualification')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Qualification
+                                </div>
+                            </div>
+                        </div>
+                           <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Department" formControlName="Department"
+                                        class="form-control"  [class.p-filled]="StatusValid.get('Department')?.value"/>
+                                    <label for="Qualification">Department</label>
+                                </span>
+                                <div *ngIf="StatusValid.get('Department')?.invalid && StatusValid.get('Department')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Department
+                                </div>
+                            </div>
+                        </div>
+                       
+
+                    </div>
+                 </form>
+
+
+                <p-accordionTab header="StatusEmployee">
+                    <p-table #dt1 [value]="dtStatus" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['EmpName','CompanyId']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect()" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="CompanyId">CompanyId <p-sortIcon field="CompanyId"></p-sortIcon></th>
+                                <th pSortableColumn="EmpName">EmpName  <p-sortIcon field="EmpName"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="PhoneNumber">PhoneNumber <p-sortIcon field="PhoneNumber"></p-sortIcon></th>
+                                <th pSortableColumn="Qualification">Qualification <p-sortIcon field="Qualification"></p-sortIcon></th>
+                                <th pSortableColumn="Department">Department <p-sortIcon field="Department"></p-sortIcon></th>         
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+                                <td>{{ emp.CompanyId }}</td>
+                                <td>{{ emp.EmpName }}</td>
+                                <td>{{ emp.PhoneNumber }}</td>
+                                <td>{{ emp.Qualification }}</td>
+                                <td>{{ emp.Department }}</td>
+                                
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  
+  <button pButton 
+          type="button"
+          pTooltip="Previous"
+          tooltipPosition="right"
+          appendTo="body"
+          class="p-button-info mr-2"
+          (click)="Previous()">
+    Previous
+  </button>
+
+  <button pButton 
+          type="button"
+          pTooltip="Next"
+          tooltipPosition="right"
+          appendTo="body"
+          class="p-button-success mr-2"
+          (click)="Next()">
+    Next
+  </button>
+
+</div>
+

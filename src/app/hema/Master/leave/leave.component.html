@@ -1,0 +1,211 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: brown;">Employee Leaves</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+                        <!-- New -->
+                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
+                        </button>
+                        <!-- Save -->
+                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Save()">
+                            Save
+                        </button>
+                        <button pButton type="button" pTooltip="Status" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Details()">
+                            Leave Status
+                        </button>
+                    </div>
+                </p-toolbar>
+
+                <form [formGroup]="Leavesform" autocomplete="off">
+                    <div class="grid p-fluid">
+
+                        <!-- Left Column -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
+                                        class="form-control" [class.p-filled]="Leavesform.get('CompanyId')?.value"/>
+                                    <label for="CompanyId">Company Id</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('CompanyId')?.invalid && Leavesform.get('CompanyId')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Company Id
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="EmpName" formControlName="EmpName"
+                                        class="form-control"  [class.p-filled]="Leavesform.get('EmpName')?.value"/>
+                                    <label for="EmpName">EmpName</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('EmpName')?.invalid && Leavesform.get('EmpName')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter EmpName
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Reason" formControlName="Reason"
+                                        class="form-control"  [class.p-filled]="Leavesform.get('Reason')?.value"/>
+                                    <label for="Reason">Reason</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('Reason')?.invalid && Leavesform.get('Reason')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Reason
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Status" formControlName="Status"
+                                        class="form-control" readonly  [class.p-filled]="Leavesform.get('Status')?.value"/>
+                                    <label for="Status">Status</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('Status')?.invalid && Leavesform.get('Status')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Status
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="EmpCode" formControlName="EmpCode"
+                                        class="form-control"  [class.p-filled]="Leavesform.get('EmpCode')?.value"/>
+                                    <label for="EmpCode">EmpCode</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('EmpCode')?.invalid && Leavesform.get('EmpCode')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter EmpCode
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="NoOfDays" formControlName="NoOfDays"
+                                        class="form-control" readonly  [class.p-filled]="Leavesform.get('NoOfDays')?.value"/>
+                                    <label for="NoOfDays">NoOfDays</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('NoOfDays')?.invalid && Leavesform.get('NoOfDays')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter NoOfDays
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="FromDate" [showTime]="true"
+                                        hourFormat="'24'" >
+                                    </p-calendar>
+                                    <label for="date">FromDate</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('FromDate')?.invalid && Leavesform.get('FromDate')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter FromDate
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="ToDate">
+                                    </p-calendar>
+                                    <label for="date">ToDate</label>
+                                </span>
+                                <div *ngIf="Leavesform.get('ToDate')?.invalid && Leavesform.get('ToDate')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter ToDate
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <p-dialog header="Leave Status" [(visible)]="showStatusDialog" [modal]="true" [closable]="true">
+                    <div class="text-center p-3">
+                        <h3>Employee: {{ selectedEmpName }}</h3>
+                        <p>Status: <strong>{{ selectedLeaveStatus }}</strong></p>
+                        <p *ngIf="selectedLeaveStatus === 'Approved'" style="color:green;">This leave has been approved.
+                        </p>
+                        <p *ngIf="selectedLeaveStatus === 'Rejected'" style="color:red;">This leave has been rejected.
+                        </p>
+                        <p *ngIf="selectedLeaveStatus === 'Pending'" style="color:orange;">This leave is still pending.
+                        </p>
+                    </div>
+                    <p-footer>
+                        <button pButton type="button" label="Close" (click)="showStatusDialog=false"
+                            class="p-button-secondary"></button>
+                    </p-footer>
+                </p-dialog>
+
+
+                <p-accordionTab header="EmployeeDetails">
+                    <p-table #dt1 [value]="dtleaves" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['EmpName','CompanyId']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect()" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="EmpName">EmpName <p-sortIcon field="EmpName"></p-sortIcon></th>
+                                <th pSortableColumn="CompanyId">CompanyId <p-sortIcon field="CompanyId"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="FromDate">FromDate <p-sortIcon field="FromDate"></p-sortIcon></th>
+                                <th pSortableColumn="ToDate">ToDate <p-sortIcon field="ToDate"></p-sortIcon></th>
+                                <th pSortableColumn="Reason">Reason <p-sortIcon field="Reason"></p-sortIcon></th>
+                                <th pSortableColumn="Status">Status <p-sortIcon field="Status"></p-sortIcon></th>
+                                <th pSortableColumn="EmpCode">EmpCode <p-sortIcon field="EmpCode"></p-sortIcon></th>
+                                <th pSortableColumn="NoOfDays">NoOfDays <p-sortIcon field="NoOfDays"></p-sortIcon></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+                                <td>{{ emp.EmpName }}</td>
+                                <td>{{ emp.CompanyId }}</td>
+                                
+                                <td>{{ emp.FromDate }}</td>
+                                <td>{{ emp.ToDate }}</td>
+                                <td>{{ emp.Reason }}</td>
+                                <td>{{ emp.Status }}</td>
+                                <td>{{ emp.EmpCode }}</td>
+                                <td>{{ emp.NoOfDays }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+
+
+
+            </p-accordion>
+        </div>
+    </div>
+</div>

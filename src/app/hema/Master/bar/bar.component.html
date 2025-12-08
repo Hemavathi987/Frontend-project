@@ -1,0 +1,36 @@
+<div class="grid container-fluid">
+  <div class="col-12">
+    <div class="card p-3">
+
+      <h1 style="text-align: center; color: brown;">Leaves Graph</h1>
+
+      <!-- ROW -->
+      <div class="row mt-4 align-items-stretch">
+
+        <!-- LEFT SIDE SUMMARY CARD -->
+        <div class="col-md-4 d-flex">
+          <div class="card shadow-sm h-100 w-100">
+            <div class="card-body text-center">
+              <h6 class="card-title mb-3">Leave Summary</h6>
+              <canvas id="leaveChart" height="250"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE LINE GRAPH -->
+        <div class="col-md-8 d-flex">
+          <div class="card shadow-sm p-3 h-100 w-100">
+            <p-chart
+              type="line"
+              [data]="data"
+              [options]="options"
+              style="width: 100%; height: 100%;">
+            </p-chart>
+          </div>
+        </div>
+
+      </div> <!-- end row -->
+
+    </div>
+  </div>
+</div>

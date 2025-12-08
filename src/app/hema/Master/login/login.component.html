@@ -1,0 +1,66 @@
+<div [ngStyle]="{
+    'background-image': 'url(\'' + backgroundUrl + '\')',
+    'background-size': 'cover',
+    'background-position': 'center',
+    'background-repeat': 'no-repeat',
+    'height': '100vh',
+    'width': '100%'
+  }" class="d-flex flex-column">
+
+  <p-toast key="login"></p-toast>
+  <div class="grid justify-content-first mt-5">
+    <div class="col-12 md:col-6 lg:col-4">
+      <div class="card p-4 shadow-3 border-round-xl">
+        <h2 class="text-center mb-4" style="color:brown;">Login</h2>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="login()">
+
+          <!-- User Name Field -->
+          <div class="field mb-4">
+            <label for="UserName" class="font-bold block mb-2">User Name</label>
+            <input id="UserName" type="text" pInputText formControlName="UserName" placeholder="Enter your UserName"
+              class="w-full" />
+            <small *ngIf="passwordForm.get('UserName')?.touched && passwordForm.get('UserName')?.invalid"
+              class="p-error">
+              User Name is required
+            </small>
+          </div>
+
+          <!-- Password Field -->
+          <div class="field mb-4">
+            <label for="Passwords" class="font-bold block mb-2">Password</label>
+            <div class="p-inputgroup">
+              <input id="Passwords" [type]="passwordFieldType" pInputText formControlName="Passwords"
+                placeholder="Enter your Password" class="w-full" />
+              <button type="button" pButton
+                icon="{{ passwordFieldType === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash' }}"
+                class="p-button-outlined" (click)="togglePasswordVisibility()"></button>
+            </div>
+            <small *ngIf="passwordForm.get('Passwords')?.touched && passwordForm.get('Passwords')?.invalid"
+              class="p-error">
+              Password is required
+            </small>
+          </div>
+          <!-- Role Field -->
+          <div class="field mb-4">
+            <label for="Role" class="font-bold block mb-2">Role</label>
+            <select id="Role" formControlName="Role" class="w-full p-inputtext">
+              <option value="">Select Role</option>
+              <option value="Admin">Admin</option>
+              <option value="Employee">Employee</option>
+            </select>
+            <small *ngIf="passwordForm.get('Role')?.touched && passwordForm.get('Role')?.invalid" class="p-error">
+              Role is required
+            </small>
+          </div>
+
+          <!-- Login Button -->
+          <div class="text-center mt-4">
+            <button type="submit" pButton label="Login" class="w-full"></button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

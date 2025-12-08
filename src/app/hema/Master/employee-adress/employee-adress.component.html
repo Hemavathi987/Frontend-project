@@ -1,0 +1,328 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: brown;">Employee Adress</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+                        <!-- New -->
+                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
+                        </button>
+                        <!-- Save -->
+                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Save()">
+                            Save
+                        </button>
+                        <!-- Update -->
+                        <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger"
+                            (click)="OpenDailog()">
+                            Update
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to Update the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <p-button pButton type="button" class="p-button-success mr-2" (click)="Update()">
+                                    Update
+                                </p-button>
+                                <p-button pButton type="button" class="p-button-danger mr-2" (click)="CloseDailog()">No
+                                </p-button>
+                            </div>
+                        </p-dialog>
+                        <!-- Delete -->
+                        <button pButton type="button" pTooltip="Delete" tooltipPosition="top"
+                            class="p-button-danger mr-2" (click)="OpenDeleteDailog()">
+                            Delete
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to delete the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <div>
+                                    <p-button pButton type="button" class="p-button-danger mr-2" (click)="Delete()">
+                                        Delete
+                                    </p-button>
+                                    <p-button pButton type="button" class="p-button-danger mr-2"
+                                        (click)="CloseDeleteDailog()">
+                                        No
+                                    </p-button>
+
+                                </div>
+                            </div>
+
+                        </p-dialog>
+
+
+                    </div>
+                </p-toolbar>
+
+                <form [formGroup]="AdressForm" autocomplete="off">
+                    <div class="grid p-fluid"> <!-- ✅ Must have this wrapper -->
+
+                        <!-- LEFT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
+                                        class="form-control" [readOnly]="isupdatemode" (focus)="showmessage()"
+                                        [class.p-filled]="AdressForm.get('CompanyId')?.value" />
+                                    <label for="CompanyId">Company Id</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('CompanyId')?.invalid && AdressForm.get('CompanyId')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Company Id
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="EmpName" formControlName="EmpName"
+                                        class="form-control" [readOnly]="isupdatemode" (focus)="showmessage()"
+                                        [class.p-filled]="AdressForm.get('EmpName')?.value" />
+                                    <label for="EmpName">Name</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('EmpName')?.invalid && AdressForm.get('EmpName')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Name
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Label" formControlName="Label"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Label')?.value" />
+                                    <label for="Label">Label</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('Label')?.invalid && AdressForm.get('Label')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Label
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Address1" formControlName="Address1"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Address1')?.value" />
+                                    <label for="Address1">Address1</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('Address1')?.invalid && AdressForm.get('Address1')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Address1
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Address2" formControlName="Address2"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Address2')?.value" />
+                                    <label for="Address2">Address2</label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Address3" formControlName="Address3"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Address3')?.value" />
+                                    <label for="Address3">Address3</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Address4" formControlName="Address4"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Address4')?.value" />
+                                    <label for="Address4">Address4</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="City" formControlName="City" class="form-control"
+                                        [class.p-filled]="AdressForm.get('City')?.value" />
+                                    <label for="City">City</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('City')?.invalid && AdressForm.get('City')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter City
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="State" formControlName="State"
+                                        class="form-control" [class.p-filled]="AdressForm.get('State')?.value" />
+                                    <label for="State">State</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('State')?.invalid && AdressForm.get('State')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter State
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Pincode" formControlName="Pincode"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Pincode')?.value" />
+                                    <label for="Pincode">Pincode</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('Pincode')?.invalid && AdressForm.get('Pincode')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Pincode
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Country" formControlName="Country"
+                                        class="form-control" [class.p-filled]="AdressForm.get('Country')?.value" />
+                                    <label for="Country">Country</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('Country')?.invalid && AdressForm.get('Country')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Country
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="UpdatedDate" [showTime]="true"
+                                        hourFormat="24">
+                                    </p-calendar>
+                                    <label for="date">UpdatedDate</label>
+                                </span>
+                                <div *ngIf="AdressForm.get('UpdatedDate')?.invalid && AdressForm.get('UpdatedDate')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter UpdatedDate
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--  Pop up-->
+                <p-dialog header="Employee Details" [(visible)]="displayPopup" [modal]="true" [closable]="true"
+                    [style]="{width: '600px'}">
+
+                    <h4>Basic Info</h4>
+                    <p *ngIf="dtEmployee.length > 0">
+                        Name: {{dtEmployee[0].Name}} <br>
+                        Company ID: {{dtEmployee[0].CompanyId}} <br>
+                        Age: {{dtEmployee[0].Age}} <br>
+                        Email: {{dtEmployee[0].Email}}
+                    </p>
+
+                    <h4>Status</h4>
+                    <p *ngIf="dtStatus.length > 0">
+                        Phone: {{dtStatus[0].PhoneNumber}} <br>
+                        Qualification: {{dtStatus[0].Qualification}} <br>
+                        Department: {{dtStatus[0].Department}}
+                    </p>
+
+                    <h4>Address</h4>
+                    <p *ngIf="dtAdress.length > 0">
+                        {{dtAdress[0].Address1}}, {{dtAdress[0].Address2}}, {{dtAdress[0].City}}, {{dtAdress[0].State}},
+                        {{dtAdress[0].Country}} - {{dtAdress[0].Pincode}}
+                    </p>
+
+                </p-dialog>
+
+                <!-- Peginator -->
+                <p-accordionTab header="EmployeeDetails">
+                    <p-table #dt1 [value]="dtAdress" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['EmpName','CompanyId']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect()" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="EmpName">EmpName <p-sortIcon field="EmpName"></p-sortIcon></th>
+                                <th pSortableColumn="CompanyId">Company Id <p-sortIcon field="CompanyId"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="Label">Label <p-sortIcon field="Label"></p-sortIcon></th>
+                                <th pSortableColumn="Address1">Address1 <p-sortIcon field="Address1"></p-sortIcon></th>
+                                <th pSortableColumn="Address2">Address2 <p-sortIcon field="Address2"></p-sortIcon></th>
+                                <th pSortableColumn="Address3">Address3 <p-sortIcon field="Address3"></p-sortIcon></th>
+                                <th pSortableColumn="Address4">Address4 <p-sortIcon field="Address4"></p-sortIcon></th>
+                                <th pSortableColumn="City">City <p-sortIcon field="City"></p-sortIcon></th>
+                                <th pSortableColumn="State">State <p-sortIcon field="State"></p-sortIcon></th>
+                                <th pSortableColumn="Pincode">Pincode <p-sortIcon field="Pincode"></p-sortIcon></th>
+                                <th pSortableColumn="Country">Country <p-sortIcon field="Country"></p-sortIcon></th>
+                                <th pSortableColumn="UpdatedDate">UpdatedDate <p-sortIcon
+                                        field="UpdatedDate"></p-sortIcon></th>
+
+
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+                                <td>{{ emp.EmpName }}</td>
+                                <td>{{ emp.CompanyId }}</td>
+                                <td>{{ emp.Label }}</td>
+                                <td>{{ emp.Address1 }}</td>
+                                <td>{{ emp.Address2 }}</td>
+                                <td>{{ emp.Address3 }}</td>
+                                <td>{{ emp.Address4 }}</td>
+                                <td>{{ emp.City }}</td>
+                                <td>{{ emp.State }}</td>
+                                <td>{{ emp.Pincode }}</td>
+                                <td>{{ emp.Country }}</td>
+                                <td>{{ emp.UpdatedDate }}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+
+            </p-accordion>
+        </div>
+    </div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+
+    <button pButton type="button" pTooltip="Previous" tooltipPosition="right" appendTo="body" class="p-button-info mr-2"
+        (click)="Previous()">
+        Previous
+    </button>
+
+    <button pButton type="button" pTooltip="Next" tooltipPosition="right" appendTo="body" class="p-button-success mr-2"
+        (click)="Next()">
+        Full Info
+    </button>
+
+</div>

@@ -1,0 +1,108 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+        <div class="card">
+            <h1 style="text-align: center; color: brown;">Status</h1>
+            <p-toast key='account'></p-toast>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-right flex flex-wrap gap-2">
+                        <button pButton type="button" class="p-button-success mr-2" (click)="getadmin()"
+                            label="Employee Status">
+                        </button>
+
+                        <button pButton type="button" class="p-button-success mr-2" (click)="OpenDilagApprove()"
+                            label="Approve">
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="aprove" [modal]="true" showEffect="fade"
+                            [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to Approve the Leave?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <div>
+                                    <p-button pButton label="Yes" type="button" class="p-button-success p-button"
+                                        (click)="getApprove()">Approve
+                                    </p-button>
+                                    <p-button class="ml-1" label="No" type="button"
+                                        styleClass="p-button p-button-danger" (click)="CloseDialagAproove()">
+                                    </p-button>
+                                </div>
+                            </div>
+                        </p-dialog>
+
+                        <button pButton type="button" class="p-button-danger mr-2" (click)="OpenDilagReject()"
+                            label="Reject">
+                        </button>
+
+                        <p-dialog header="Confirm delete record" [(visible)]="reject" [modal]="true" showEffect="fade"
+                            [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to Reject the Leave?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <div>
+                                    <p-button pButton label="Yes" type="button" class="p-button-success p-button"
+                                        (click)="getReject()">Reject
+                                    </p-button>
+                                    <p-button class="ml-1" label="No" type="button"
+                                        styleClass="p-button p-button-danger" (click)="CloseDialagReject()">
+                                    </p-button>
+                                </div>
+                            </div>
+                        </p-dialog>
+
+                    </div>
+                </p-toolbar>
+
+                <!-- ✅ Table to show pending leaves -->
+                <p-accordionTab header="EmployeeDetails">
+                    <p-table #dt1 [value]="dtLeaves" [(selection)]="SelectRecord" selectionMode="single"
+                        (onRowUnselect)="SelectRecord = null" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['EmpName','CompanyId']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect($event)" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="EmpName">EmpName <p-sortIcon field="EmpName"></p-sortIcon></th>
+                                <th pSortableColumn="CompanyId">CompanyId <p-sortIcon field="CompanyId"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="FromDate">FromDate <p-sortIcon field="FromDate"></p-sortIcon></th>
+                                <th pSortableColumn="ToDate">ToDate <p-sortIcon field="ToDate"></p-sortIcon></th>
+                                <th pSortableColumn="Reason">Reason <p-sortIcon field="Reason"></p-sortIcon></th>
+                                <th pSortableColumn="Status">Status <p-sortIcon field="Status"></p-sortIcon></th>
+                                <th pSortableColumn="EmpCode">EmpCode <p-sortIcon field="EmpCode"></p-sortIcon></th>
+                                <th pSortableColumn="NoOfDays">NoOfDays <p-sortIcon field="NoOfDays"></p-sortIcon></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+                                <td>{{ emp.EmpName }}</td>
+                                <td>{{ emp.CompanyId }}</td>
+                                <td>{{ emp.FromDate }}</td>
+                                <td>{{ emp.ToDate }}</td>
+                                <td>{{ emp.Reason }}</td>
+                                <td>{{ emp.Status }}</td>
+                                <td>{{ emp.EmpCode }}</td>
+                                <td>{{ emp.NoOfDays }}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+
+                <div *ngIf="dtLeaves.length === 0" style="text-align:center; padding: 1rem;">
+                    <p>No pending leaves found.</p>
+                </div>
+            </p-accordion>
+        </div>
+    </div>
+</div>
