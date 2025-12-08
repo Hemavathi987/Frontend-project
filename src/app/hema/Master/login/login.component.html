@@ -38,7 +38,7 @@
             </div>
             <small *ngIf="passwordForm.get('Passwords')?.touched && passwordForm.get('Passwords')?.invalid"
               class="p-error">
-              Password is required
+              Password is required 
             </small>
           </div>
           <!-- Role Field -->
@@ -57,6 +57,9 @@
           <!-- Login Button -->
           <div class="text-center mt-4">
             <button type="submit" pButton label="Login" class="w-full"></button>
+          </div>
+           <div class="text-center mt-4">
+            <button type="Reset" pButton label="Reset" class="w-full"></button>
           </div>
 
         </form>
