@@ -51,6 +51,16 @@ export class MasterLoginService {
     return this.http.post(this.baseUrl + 'Add-Password', body, { headers });
   }
 
-  
+  refreshbutton(refreshToken: string): Observable<any> {
+  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  const params = new HttpParams().set('refresh', refreshToken);
 
+  return this.http.post(this.baseUrl + 'refresh-tocken', {}, { headers, params });
+}
+
+refreshToken() {
+  let refresh = localStorage.getItem("refreshToken");
+
+  return this.http.get<any>(`https://localhost:7087/Api/refresh-token?refresh=${refresh}`);
+}
 }

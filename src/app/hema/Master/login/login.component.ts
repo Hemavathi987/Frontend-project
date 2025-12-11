@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
     this.checkAlreadyLoggedIn();
   }
 
+
   initForm() {
     this.passwordForm = this.fb.group({
       UserName: ['', Validators.required],
@@ -139,7 +140,7 @@ export class LoginComponent implements OnInit {
 
       this.spinner.show();
 
-      this.loginService.login(UserName, Passwords,Role).subscribe({
+      this.loginService.login(UserName, Passwords, Role).subscribe({
         next: (data) => {
           this.spinner.hide();
 
@@ -158,6 +159,12 @@ export class LoginComponent implements OnInit {
           // ✅ Save token if available
           if (data?.Data?.Token) {
             localStorage.setItem('token', data.Data.Token);
+          }
+          if (data?.Data?.RefreshToken) {
+            localStorage.setItem('RefreshToken', data.Data.RefreshToken);
+          }
+          if (data?.Data?.RefreshTokenExpiryTime) {
+            localStorage.setItem('RefreshTokenExpiryTime', data.Data.RefreshTokenExpiryTime);
           }
           localStorage.setItem('role', Role);
 
@@ -188,6 +195,34 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // refresh() {
+  //   this.spinner.show()
+  //   const refreshToken = localStorage.getItem('refreshToken');
+  //   if (!refreshToken) {
+  //     console.warn('No refresh tocken available');
+  //     return;
+  //   }
+  //   this.loginService.refreshbutton(refreshToken).subscribe({
+  //     next: (data) => {
+  //       this.spinner.hide();
+  //        if (data?.Data?.Token) {
+  //       localStorage.setItem("token", data.Data.Token);
+  //       console.log("New token refreshed:", data.Data.Token);
+  //     }
+  //   },
+  //     error: (err) => {
+  //       this.spinner.hide();
+  //       console.error('Refresh token error:', err);
+  //       this.messageService.add({
+  //         severity: 'error',
+  //         summary: 'Error',
+  //         detail: 'Failed to refresh token',
+  //         life: 3000
+  //       });
+  //     }
+  //   });
+
+  // }
 
   onKeyPress(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {

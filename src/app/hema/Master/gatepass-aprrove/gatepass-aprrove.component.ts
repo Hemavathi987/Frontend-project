@@ -12,6 +12,7 @@ import { ToolbarModule } from "primeng/toolbar";
 import { GatePass } from '../../Model/Model';
 import { MasterGatePass } from '../../Service/gatepass';
 import { onGlobalTableFilter } from '../../../Folder/global.filter';
+import { MasterLoginService } from '../../Service/login.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class GatepassAprroveComponent implements OnInit {
   constructor(private messageService: MessageService,
     private spinner: NgxSpinnerService,
     private mastetService: MasterGatePass,
+    private loginService : MasterLoginService
   ) { }
 
   onRowSelect(event: any) {
@@ -52,6 +54,7 @@ export class GatepassAprroveComponent implements OnInit {
   CloseDialagReject() {
     this.reject = false;
   }
+
 
   OpenDilagApprove() {
     if (this.SelectRecord?.Id) {

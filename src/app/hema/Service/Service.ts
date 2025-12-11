@@ -1,93 +1,103 @@
 import { Injectable } from "@angular/core";
-import { HttpClient,HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "../../Folder/Environment.prod";
 import { AuthenticationService } from "../Au/AuthenticationService";
-import { Employee } from "../Model/Model";
+import { Employee, Photo } from "../Model/Model";
 
 import { EmployeeAdressComponent } from "../Master/employee-adress/employee-adress.component";
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class MasterService {
-    constructor(
-        private http : HttpClient,
-      
-        private auth : AuthenticationService
-    ){}
-   private account:string = environment.baseUrl  ;
+  constructor(
+    private http: HttpClient,
+
+    private auth: AuthenticationService
+  ) { }
+  private account: string = environment.baseUrl;
 
 
 
-   Employeegetemployee( ): Observable<any> {
-  let appUserId = this.auth.UserID();
-  let connName = this.auth.CompConn();
-  
-  const params = new HttpParams()
-    .set('appUserId', appUserId)
-    .set('connName', connName);
+  Employeegetemployee(): Observable<any> {
+    let appUserId = this.auth.UserID();
+    let connName = this.auth.CompConn();
 
-  console.log('Employee GET params:', params.toString());
-   
-  return this.http.get(this.account + 'Employee/get-employee', { params });
-}
+    const params = new HttpParams()
+      .set('appUserId', appUserId)
+      .set('connName', connName);
 
-   
+    console.log('Employee GET params:', params.toString());
 
-   Employeeidgetemployee(Id : number) : Observable<any>
-   {
-      const params = new HttpParams()
-      .set('Id',Id)
-      .set('appUserId',this.auth.UserID())
-      .set('connName',this.auth.CompConn());
-      console.log('Employee GET params:', params.toString());
-      return this.http.get(this.account+'Employee/id-get-employee/'+Id,{ params })
-   }
+    return this.http.get(this.account + 'Employee/get-employee', { params });
+  }
 
 
-   Employeeidpostemployee(employee : Employee) : Observable<any>
-   {
-     employee.AppUserId = this.auth.UserID();
-     employee.ConnName = this.auth.CompConn();
-   return this.http.post(this.account + 'Employee/id-post-employee', employee, {
-  headers: { 'Content-Type': 'application/json' }
-});
-   }
+
+  Employeeidgetemployee(Id: number): Observable<any> {
+    const params = new HttpParams()
+      .set('Id', Id)
+      .set('appUserId', this.auth.UserID())
+      .set('connName', this.auth.CompConn());
+    console.log('Employee GET params:', params.toString());
+    return this.http.get(this.account + 'Employee/id-get-employee/' + Id, { params })
+  }
 
 
-    Employeeidputemployee(employee: Employee): Observable<any> {
+  Employeeidpostemployee(employee: Employee): Observable<any> {
+    employee.AppUserId = this.auth.UserID();
+    employee.ConnName = this.auth.CompConn();
+    return this.http.post(this.account + 'Employee/id-post-employee', employee, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+
+  Employeeidputemployee(employee: Employee): Observable<any> {
     const param = new HttpParams()
       .set('appUserId', this.auth.UserID())
-        .set('connName', this.auth.CompConn());
+      .set('connName', this.auth.CompConn());
 
-return this.http.put(this.account + 'Employee/id-put-employee/' + employee.Id, employee, {
-  params: param,
-  headers: { 'Content-Type': 'application/json' }
-});
-}    
+    return this.http.put(this.account + 'Employee/id-put-employee/' + employee.Id, employee, {
+      params: param,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 
 
 
-Employeeiddeleteemployee(Id: number): Observable<any> {
-  const params = new HttpParams()
-    .set('Id', Id)
-    .set('appUserId', this.auth.UserID())
-    .set('connName', this.auth.CompConn());
+  Employeeiddeleteemployee(Id: number): Observable<any> {
+    const params = new HttpParams()
+      .set('Id', Id)
+      .set('appUserId', this.auth.UserID())
+      .set('connName', this.auth.CompConn());
 
-  return this.http.delete(this.account + 'Employee/id-delete-employee', { params });
-}
+    return this.http.delete(this.account + 'Employee/id-delete-employee', { params });
+  }
 
-AlredycreatedfullemployeeInformation(CompId: number, EmpName: string): Observable<any> {
-  const url = `${this.account}Employee/Alredy-created-full-employeeInformation-${CompId}-${EmpName}`;
-  return this.http.get(url, { headers: { 'Content-Type': 'application/json' } });
-}
+  AlredycreatedfullemployeeInformation(CompId: number, EmpName: string): Observable<any> {
+    const url = `${this.account}Employee/Alredy-created-full-employeeInformation-${CompId}-${EmpName}`;
+    return this.http.get(url, { headers: { 'Content-Type': 'application/json' } });
+  }
 
- Reportreportname(EmpName : string) : Observable<any>
-    {
-      const params = new HttpParams()
-       .set('EmpName',EmpName)
-        .set('appUserID',this.auth.UserID())
-        .set('ConnName',this.auth.CompConn());
-        return this.http.get(this.account+'Report/report-name',{params});
-    }
+  Reportreportname(EmpName: string): Observable<any> {
+    const params = new HttpParams()
+      .set('EmpName', EmpName)
+      .set('appUserID', this.auth.UserID())
+      .set('ConnName', this.auth.CompConn());
+    return this.http.get(this.account + 'Report/report-name', { params });
+  }
+
+  AddPhotos(photoFile: File, empName: string, companyId: number): Observable<any> {
+
+    const formData = new FormData();
+    formData.append("Photo", photoFile)
+    formData.append("EmpName", empName)
+    formData.append("CompanyId", companyId.toString())
+     formData.set('appUserID', this.auth.UserID())
+      formData.set('ConnName', this.auth.CompConn());
+
+    return this.http.post(this.account + 'Employee/add-photo', formData);
+  }
+
 }
