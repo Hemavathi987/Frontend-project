@@ -32,7 +32,7 @@ export class EmployeeComponent implements OnInit {
   dtadress: EmployeeAdress[] = [];
   dtStatus: StatusEmployee[] = [];
   employee: Employee = {};
-  displayPopup : boolean = false;
+  displayPopup: boolean = false;
   cols: any[] = [];
   EmployeeForm!: FormGroup;
   index = 1;
@@ -40,7 +40,7 @@ export class EmployeeComponent implements OnInit {
   displaydelete = false;
   displayUpdate = false;
   displayDialog = false;
-  isUpdateMode:boolean=false;
+  isUpdateMode: boolean = false;
 
   constructor(private formbuilder: FormBuilder,
     private messageService: MessageService,
@@ -68,24 +68,23 @@ export class EmployeeComponent implements OnInit {
 
 
   clear() {
-    this.isUpdateMode=false;
+    this.isUpdateMode = false;
     this.EmployeeForm.reset();
     this.index = 1;
     this.SelectedRecord = null;
   }
 
-ShowMessage(){
- if(this.isUpdateMode)
- {
-   this.messageService.add({
-      key:'account',
-      severity:'warn',
-      summary:'Warn',
-      detail:'Cannot edit this field during update',
-      life:2000
-   });
- }
-}
+  ShowMessage() {
+    if (this.isUpdateMode) {
+      this.messageService.add({
+        key: 'account',
+        severity: 'warn',
+        summary: 'Warn',
+        detail: 'Cannot edit this field during update',
+        life: 2000
+      });
+    }
+  }
   OnTab(num: any) {
     this.index = num.index;
   }
@@ -172,17 +171,16 @@ ShowMessage(){
   }
 
 
-Next()
-{
- this.router.navigate(['/master/status']);
-}
+  Next() {
+    this.router.navigate(['/master/status']);
+  }
 
 
 
   onRowSelect(event: any) {
-    this.isUpdateMode=true;
+    this.isUpdateMode = true;
     const row: Employee = event.data; // <- get the row from event.data
-    
+
     if (row) {
       this.EmployeeForm.patchValue({
         Id: row.Id ?? null,
@@ -334,7 +332,7 @@ Next()
       next: (data) => {
         this.clear();
         this.getEmployee();
-        this.spinner.hide(); 
+        this.spinner.hide();
         this.messageService.add({
           key: 'account',
           severity: 'success',
@@ -359,85 +357,85 @@ Next()
     })
   }
 
- getEmployee2(CompId: number, EmpName: string) {
-  this.spinner.show();
+  getEmployee2(CompId: number, EmpName: string) {
+    this.spinner.show();
 
-  this.mastetService.AlredycreatedfullemployeeInformation(CompId, EmpName).subscribe({
-    next: (data: any) => {
-      console.log('🟢 Full API raw response:', data);
-      const res = data?.body ? data.body : data;
+    this.mastetService.AlredycreatedfullemployeeInformation(CompId, EmpName).subscribe({
+      next: (data: any) => {
+        console.log('🟢 Full API raw response:', data);
+        const res = data?.body ? data.body : data;
 
-      if (res?.Status?.toLowerCase?.() === 'success' && res?.Data) {
-        const empData = res.Data;
+        if (res?.Status?.toLowerCase?.() === 'success' && res?.Data) {
+          const empData = res.Data;
 
-        this.dtEmployee = [{
-          CompanyId: empData.CompanyId,
-          Name: empData.Name,
-          Age: empData.Age,
-          Email: empData.Email
-        }];
+          this.dtEmployee = [{
+            CompanyId: empData.CompanyId,
+            Name: empData.Name,
+            Age: empData.Age,
+            Email: empData.Email
+          }];
 
-        this.dtStatus = [{
-          CompanyId: empData.CompanyId,
-          EmpName: empData.Name,
-          PhoneNumber: empData.PhoneNumber,
-          Qualification: empData.Qualification,
-          Department: empData.Department
-        }];
+          this.dtStatus = [{
+            CompanyId: empData.CompanyId,
+            EmpName: empData.Name,
+            PhoneNumber: empData.PhoneNumber,
+            Qualification: empData.Qualification,
+            Department: empData.Department
+          }];
 
-        this.dtadress = [{
-          CompanyId: empData.CompanyId,
-          EmpName: empData.Name,
-          Label: empData.Label,
-          Address1: empData.Address1,
-          Address2: empData.Address2,
-          Address3: empData.Address3,
-          Address4: empData.Address4,
-          City: empData.City,
-          State: empData.State,
-          Pincode: empData.Pincode,
-          Country: empData.Country,
-          UpdatedDate: empData.UpdatedDate
-        }];
+          this.dtadress = [{
+            CompanyId: empData.CompanyId,
+            EmpName: empData.Name,
+            Label: empData.Label,
+            Address1: empData.Address1,
+            Address2: empData.Address2,
+            Address3: empData.Address3,
+            Address4: empData.Address4,
+            City: empData.City,
+            State: empData.State,
+            Pincode: empData.Pincode,
+            Country: empData.Country,
+            UpdatedDate: empData.UpdatedDate
+          }];
 
-        this.messageService.add({
-          key: 'account',
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Employee contain all the information',
-          life:3000
-        });
+          this.messageService.add({
+            key: 'account',
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Employee contain all the information',
+            life: 3000
+          });
           this.displayPopup = true;
-      } else {
-        console.warn('⚠️ Unexpected response format:', res);
+        } else {
+          console.warn('⚠️ Unexpected response format:', res);
+          this.messageService.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Not Found',
+            detail: 'Employee does not contain all the information or invalid response',
+            life: 3000,
+          });
+        }
+        //973152(Keeru) \\  997257(Jain)
+        this.spinner.hide();
+      },
+
+      error: (err) => {
+        this.spinner.hide();
         this.messageService.add({
           key: 'account',
-          severity: 'warn',
-          summary: 'Not Found',
-          detail: 'Employee does not contain all the information or invalid response',
-          life:3000,
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error?.Message || 'Employee does not contain all the information',
+          life: 3000,
         });
-      }
-    //973152(Keeru) \\  997257(Jain)
-      this.spinner.hide();
-    },
-
-    error: (err) => {
-      this.spinner.hide();
-      this.messageService.add({
-        key: 'account',
-        severity: 'error',
-        summary: 'Error',
-        detail: err?.error?.Message || 'Employee does not contain all the information',
-        life: 3000,
-      });
-    },
-  });
-}
-
-
-
+      },
+    });
   }
+
+
+
+}
 
 
 
