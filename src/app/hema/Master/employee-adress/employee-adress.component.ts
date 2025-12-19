@@ -3,7 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
 import { MasterEmployyAdressService } from '../../Service/employee.adress.service';
 import { ToastModule } from 'primeng/toast';
-import { Employee, EmployeeAdress, StatusEmployee } from '../../Model/Model';
+import { Employee, EmployeeAdress, Photo, StatusEmployee } from '../../Model/Model';
 import { CalendarModule } from 'primeng/calendar';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccordionModule } from 'primeng/accordion';
@@ -33,6 +33,7 @@ import { MasterService } from '../../Service/Service';
 })
 export class EmployeeAdressComponent implements OnInit {
 
+  dtPhoto : Photo[] =[];
   Adress: EmployeeAdress = {};
 displayPopup : boolean = false;
   dtAdress: EmployeeAdress[] = [];
@@ -312,6 +313,11 @@ showmessage()
           Age: empData.Age,
           Email: empData.Email
         }];
+         this.dtPhoto = [{
+            CompanyId: empData.CompanyId,
+            Name: empData.Name,
+            PhotoBase: empData.PhotoBase
+          }]
 
         this.dtStatus = [{
           CompanyId: empData.CompanyId,

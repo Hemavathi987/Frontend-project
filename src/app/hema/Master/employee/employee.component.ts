@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { Employee, EmployeeAdress, StatusEmployee } from '../../Model/Model';
+import { Employee, EmployeeAdress, StatusEmployee, Photo } from '../../Model/Model';
 import { Table, TableModule, TableRowSelectEvent } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { onGlobalTableFilter } from '../../../Folder/global.filter';
@@ -16,22 +16,28 @@ import { CommonModule } from '@angular/common';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { TooltipModule } from "primeng/tooltip";
 import { Router } from '@angular/router';
+import { FileUploadModule } from 'primeng/fileupload';
 
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [ReactiveFormsModule, ToolbarModule, FloatLabelModule, TableModule, CommonModule, AccordionModule, ButtonModule, DialogModule, PaginatorModule, ToastModule, TooltipModule],
+  imports: [ReactiveFormsModule, ToolbarModule, FileUploadModule, FloatLabelModule, TableModule, CommonModule, AccordionModule, ButtonModule, DialogModule, PaginatorModule, ToastModule, TooltipModule],
   providers: [MessageService, NgxSpinnerService],
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.scss']
 })
 export class EmployeeComponent implements OnInit {
 
+  photoBase: string = '';  // Base64 without prefix
+  previewUrl: string | ArrayBuffer | null = null;
+  photoFileName: string = '';
   dtEmployee: Employee[] = [];
+  dtPhoto: Photo[] = [];
   dtadress: EmployeeAdress[] = [];
   dtStatus: StatusEmployee[] = [];
   employee: Employee = {};
+  photo!: Photo ;
   displayPopup: boolean = false;
   cols: any[] = [];
   EmployeeForm!: FormGroup;
@@ -62,7 +68,7 @@ export class EmployeeComponent implements OnInit {
       Name: ['', Validators.required],
       Age: ['', Validators.required],
       Email: ['', Validators.required],
-
+      PhotoBase: ['', Validators.required]
     });
   }
 
@@ -126,7 +132,7 @@ export class EmployeeComponent implements OnInit {
         this.EmployeeForm.value.Id === null ? 0 :
           this.EmployeeForm.value.Id;
       this.mastetService.Employeeidpostemployee(this.EmployeeForm.value).subscribe({
-        next: (data: Employee) => {
+        next: (Data: Employee) => {
           this.clear();
           this.getEmployee();
           this.spinner.hide();
@@ -149,7 +155,32 @@ export class EmployeeComponent implements OnInit {
           });
         },
       });
+      // inside the success callback of Employeeidpostemployee(...)
+      const formValue = this.EmployeeForm.value;
+      // make sure file exists and is a real File
+      const file = formValue.PhotoBase;
+      if (file && file instanceof File) {
+        const fd = new FormData();
 
+        fd.append("CompanyId", formValue.CompanyId?.toString() || "");
+        fd.append("Name", formValue.Name || "");    // <-- MUST be EmpName
+       fd.append('PhotoBase', formValue.PhotoBase); 
+        this.mastetService.AddPhoto(fd).subscribe({
+          next: (res: Photo) => {
+       
+            console.log("Photo Saved:", res);
+          },
+          error: (err) => {
+            this.messageService.add({
+              key: 'account',
+              severity: 'error',
+              summary: 'Photo Error',
+              detail: err.error?.Message || 'Failed to upload photo',
+              life: 3000,
+            });
+          }
+        });
+      }
     } else {
       this.EmployeeForm.markAllAsTouched();
     }
@@ -382,6 +413,11 @@ export class EmployeeComponent implements OnInit {
             Qualification: empData.Qualification,
             Department: empData.Department
           }];
+          this.dtPhoto = [{
+            CompanyId: empData.CompanyId,
+            Name: empData.Name,
+            PhotoBase: empData.PhotoBase
+          }]
 
           this.dtadress = [{
             CompanyId: empData.CompanyId,
@@ -433,9 +469,26 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
+ onPhotoSelect(event: any) {
+  const file: File = event.files[0]; // PrimeNG FileUpload
+  if (!file) return;
 
+  this.photoFileName = file.name;
 
+  // Optional preview
+  this.previewUrl = URL.createObjectURL(file);
+
+  // ✅ STORE FILE OBJECT (NOT BASE64)
+  this.EmployeeForm.patchValue({
+    PhotoBase: file
+  });
+
+  this.EmployeeForm.get('PhotoBase')?.markAsTouched();
 }
+}
+
+
+
 
 
 
