@@ -132,3 +132,11 @@ export interface  Password{
     Role? : string;
    Token? : string
 }
+export interface  Photo{
+    Id?  :number;
+  CompanyId?  :number;
+    Name? : string;
+   PhotoBase? : string;
+      AppUserId?: string;
+    ConnName?: string;
+}

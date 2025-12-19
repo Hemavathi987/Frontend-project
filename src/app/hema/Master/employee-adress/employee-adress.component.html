@@ -229,6 +229,18 @@
                 <p-dialog header="Employee Details" [(visible)]="displayPopup" [modal]="true" [closable]="true"
                     [style]="{width: '600px'}">
 
+                    <h4>Employee Photo</h4>
+
+                    <!-- Show photo -->
+                    <div *ngIf="dtPhoto.length > 0 && dtPhoto[0].PhotoBase">
+                        <img [src]="'data:image/png;base64,' + dtPhoto[0].PhotoBase" alt="Employee Photo" width="150"
+                            height="150" style="border-radius: 8px;" />
+                    </div>
+
+                    <!-- No photo -->
+                    <div *ngIf="dtPhoto.length === 0 || !dtPhoto[0]?.PhotoBase">
+                        <p>No photo available</p>
+                    </div>
                     <h4>Basic Info</h4>
                     <p *ngIf="dtEmployee.length > 0">
                         Name: {{dtEmployee[0].Name}} <br>

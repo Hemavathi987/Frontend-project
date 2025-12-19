@@ -63,60 +63,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // login() {
-  //   if (this.passwordForm.valid) {
-  //     this.submitted = true;
-  //     const UserName = this.passwordForm.get('UserName')?.value;
-  //     const Passwords = this.passwordForm.get('Passwords')?.value;
-  //     const Role = this.passwordForm.get('Role')?.value;
-  //     if (UserName !== 'Hema' || Passwords !== 'He@123'|| Role ) {
-  //       this.messageService.add({
-  //         key: 'login',
-  //         severity: 'error',
-  //         summary: 'Invalid Credentials',
-  //         detail: 'Please enter correct UserName and Password',
-  //         life: 3000
-  //       });
-  //       return; // Stop execution if invalid
-  //     }
-  //     this.spinner.show();
-
-  //     this.loginService.login(UserName, Passwords).subscribe({
-  //       next: (data) => {
-  //         const item = data.User;
-  //         this.spinner.hide();
-  //         const err = data['Error'];
-  //         if (err !== null && err !== undefined && err !== "") {
-  //           this.messageService.add({ key: 'login', severity: 'error', summary: 'Error', detail: err, life: 3000 });
-  //         } else {
-  //           this.messageService.add({
-  //             key: "login", severity: 'success', summary: 'Welcome Back', detail: `Hello ${UserName}`,
-  //             life: 3000
-  //           });
-  //           this.authService.StoreLoginDate(data);
-  //           localStorage.setItem("isLogin", "1");
-  //            console.log('Login response:', data);
-  //           if (data?.Data?.Token) {
-  //             localStorage.setItem("token", data.Data.Token);
-  //               console.log('Token saved:', data.Data.Token);
-  //           }
-
-
-  //           setTimeout(() => {
-  //             this.router.navigate(['/master']);
-  //           }, 1000);
-  //         }
-  //       },
-  //       error: (err) => {
-  //         this.spinner.hide();
-  //         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Opps something went wrong.', life: 3000 });
-  //       }
-  //     });
-  //   }
-  //   else {
-  //     this.passwordForm.markAllAsTouched();
-  //   }
-  // }
+  
 
   login() {
     if (this.passwordForm.valid) {
@@ -158,6 +105,12 @@ export class LoginComponent implements OnInit {
           // ✅ Save token if available
           if (data?.Data?.Token) {
             localStorage.setItem('token', data.Data.Token);
+          }
+            if (data?.Data?.RefreshToken) {
+            localStorage.setItem('RefreshToken', data.Data.RefreshToken);
+          }
+            if (data?.Data?.RefreshTokenExpiryTime) {
+            localStorage.setItem('RefreshTokenExpiryTime', data.Data.RefreshTokenExpiryTime);
           }
           localStorage.setItem('role', Role);
 

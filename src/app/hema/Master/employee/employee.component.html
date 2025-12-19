@@ -6,8 +6,8 @@
       <h1 style="text-align: center; color: brown;">Employee Details</h1>
       <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
 
-
         <p-toolbar class="p-4 mt-4">
+          <h1>Employee Details</h1>
           <div class="p-toolbar-group-right  flex flex-wrap gap-2">
 
             <!-- New Button -->
@@ -26,7 +26,7 @@
             <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true" showEffect="fade"
               [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
               <span>Are You show You want to Update the Record?</span>
-              <div class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+              <div class="flex flex-column md:flex-row mt-5 md:Fustify-content-center md:align-items-center">
                 <div>
                   <p-button pButton label="Yes" type="button" class="p-button-success p-button"
                     (click)="Update()">Update
@@ -84,6 +84,18 @@
         <p-dialog header="Employee Details" [(visible)]="displayPopup" [modal]="true" [closable]="true"
           [style]="{width: '600px'}">
 
+          <h4>Employee Photo</h4>
+
+          <!-- Show photo -->
+          <div *ngIf="dtPhoto.length > 0 && dtPhoto[0].PhotoBase">
+            <img [src]="'data:image/png;base64,' + dtPhoto[0].PhotoBase" alt="Employee Photo" width="150" height="150"
+              style="border-radius: 8px;" />
+          </div>
+
+          <!-- No photo -->
+          <div *ngIf="dtPhoto.length === 0 || !dtPhoto[0]?.PhotoBase">
+            <p>No photo available</p>
+          </div>
           <h4>Basic Info</h4>
           <p *ngIf="dtEmployee.length > 0">
             Name: {{dtEmployee[0].Name}} <br>
@@ -116,7 +128,8 @@
 
                 <span class="p-float-label w-100">
                   <input type="text" pInputText id="CompanyId" formControlName="CompanyId" class="form-control"
-                    [readOnly]="isUpdateMode" (focus)="ShowMessage()" [class.p-filled]="EmployeeForm.get('CompanyId')?.value"/>
+                    [readOnly]="isUpdateMode" (focus)="ShowMessage()"
+                    [class.p-filled]="EmployeeForm.get('CompanyId')?.value" />
                   <label for="CompanyId">Company Id</label>
                 </span>
                 <div *ngIf="EmployeeForm.get('CompanyId')?.invalid && EmployeeForm.get('CompanyId')?.touched"
@@ -130,7 +143,8 @@
               <div class="mb-3">
                 <span class="p-float-label w-100">
                   <input type="text" pInputText id="Name" formControlName="Name" class="form-control"
-                    [readOnly]="isUpdateMode" (focus)="ShowMessage()" [class.p-filled]="EmployeeForm.get('Name')?.value"/>
+                    [readOnly]="isUpdateMode" (focus)="ShowMessage()"
+                    [class.p-filled]="EmployeeForm.get('Name')?.value" />
                   <label for="Name">Name</label>
                 </span>
                 <div *ngIf="EmployeeForm.get('Name')?.invalid && EmployeeForm.get('Name')?.touched"
@@ -144,7 +158,8 @@
             <div class="col-12 md:col-6">
               <div class="mb-3">
                 <span class="p-float-label w-100">
-                  <input type="text" pInputText id="Age" formControlName="Age" class="form-control" [class.p-filled]="EmployeeForm.get('Age')?.value"/>
+                  <input type="text" pInputText id="Age" formControlName="Age" class="form-control"
+                    [class.p-filled]="EmployeeForm.get('Age')?.value" />
                   <label for="Age">Age</label>
                 </span>
                 <div *ngIf="EmployeeForm.get('Age')?.invalid && EmployeeForm.get('Age')?.touched"
@@ -157,7 +172,8 @@
               <div class="mb-3">
                 <span class="p-float-label w-100">
                   <p-floatLabel>
-                    <input type="text" pInputText id="Email" formControlName="Email" class="form-control" [class.p-filled]="EmployeeForm.get('Email')?.value"/>
+                    <input type="text" pInputText id="Email" formControlName="Email" class="form-control"
+                      [class.p-filled]="EmployeeForm.get('Email')?.value" />
                     <label for="Email">Email</label>
                   </p-floatLabel>
                 </span>
@@ -167,7 +183,25 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-12 md:col-6">
+              <div class="mb-3">
+                <p-fileUpload #fileUpload name="PhotoBase" mode="basic" accept="image/*" maxFileSize="200000"
+                  (onSelect)="onPhotoSelect($event)" chooseLabel="Upload Photo">
+                </p-fileUpload>
+                <img *ngIf="previewUrl" [src]="previewUrl" alt="PhotoBase" height="120" class="mt-2 rounded" />
+                <div *ngIf="EmployeeForm.get('PhotoBase')?.invalid && EmployeeForm.get('PhotoBase')?.touched"
+                  class="text-danger mt-1 fst-normal">
+                  Please Add Photo
+                </div>
+              </div>
+            </div>
           </div>
+          <div *ngIf="photoFileName" class="mt-2 fw-bold">
+            {{ photoFileName }}
+          </div>
+
+
         </form>
 
 
@@ -210,13 +244,8 @@
   </div>
 </div>
 <div style="text-align: right;">
-  <button pButton 
-          type="button"
-          pTooltip="Next"
-          tooltipPosition="right"
-          appendTo="body"
-          class="p-button-success mr-2"
-          (click)="Next()">
+  <button pButton type="button" pTooltip="Next" tooltipPosition="right" appendTo="body" class="p-button-success mr-2"
+    (click)="Next()">
     Next
   </button>
 </div>
