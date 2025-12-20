@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
 //jwtDecode(token) is a function from the jwt-decode library that takes a JWT 
 // (JSON Web Token) string and decodes it into a readable JavaScript object without validating it.
   navigate(path: string) {
-    this.router.navigate(['/master', path]);
+    this.router.navigate(['/master/employee', path]);
   }
 
   logout() {

@@ -40,7 +40,7 @@ const routes: Routes = [
 
   // ✅ EMPLOYEE DASHBOARD
   {
-    path: '',
+    path: 'employee',
     component: DashboardComponent,
     canActivate: [authGuard],
     children: [

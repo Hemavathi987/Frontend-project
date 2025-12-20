@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
             if (Role.toLowerCase() === 'admin') {
               this.router.navigate(['/master/admine']);
             } else if (Role.toLowerCase() === 'employee') {
-              this.router.navigate(['/master']);
+              this.router.navigate(['/master/employee']);
             } else {
               this.router.navigate(['/master/login']);
             }
