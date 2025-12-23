@@ -259,12 +259,12 @@ onGlobalFilter(table: Table, event: Event) {
   
     Next()
     {
-     this.router.navigate(['/master/adress']);
+     this.router.navigate(['/master/employee/adress']);
 
     }
     Previous()
     {
-      this.router.navigate(['/master/employee']);
+      this.router.navigate(['/master/employee/employee']);
     }
 
 }

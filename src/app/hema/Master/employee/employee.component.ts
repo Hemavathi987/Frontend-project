@@ -203,7 +203,7 @@ export class EmployeeComponent implements OnInit {
 
 
   Next() {
-    this.router.navigate(['/master/status']);
+    this.router.navigate(['/master/employee/status']);
   }
 
 

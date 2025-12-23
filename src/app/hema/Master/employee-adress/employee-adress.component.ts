@@ -287,7 +287,7 @@ showmessage()
   
   Previous()
   {
-    this.router.navigate(['/master/status']);
+    this.router.navigate(['/master/employee/status']);
   }
 
   Next() {

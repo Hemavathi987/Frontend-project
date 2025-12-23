@@ -33,27 +33,7 @@ export class AuthenticationService {
   // Some APIs send user info in data.User, others in data.data
   const userInfo = data.Data || data.ObjectData || data.User || data.data;
 
-  // if (userInfo) {
-  //   // ✅ Save UserId and Connection Name safely
-  //   sessionStorage.setItem("UserId", userInfo.id?.toString() || "System");
-  //   sessionStorage.setItem("UserName", userInfo.userName || "System");
-  //   sessionStorage.setItem("connName", data.Companies?.[0]?.ConnectString || "NEWConn");
-
-  //   // Optional: store menus, preferences, etc.
-  //   if (data.Companies)
-  //     localStorage.setItem(this.userCompObjName, JSON.stringify(data.Companies));
-
-  //   if (data.MenusNew)
-  //     localStorage.setItem(this.userMenuObjName, JSON.stringify(data.MenusNew));
-
-  //   if (data.Preference)
-  //     localStorage.setItem(this.userPreferObjName, JSON.stringify(data.Preference));
-
-  //   if (data.UserCompanies)
-  //     localStorage.setItem(this.uCompObjName, JSON.stringify(data.UserCompanies));
-  // } else {
-  //   console.error("Invalid login response:", data);
-  // }
+  
    if (userInfo) {
     // ✅ Save login info to session storage
     sessionStorage.setItem("UserId", userInfo.Id?.toString() || "System");
