@@ -95,4 +95,7 @@ export class MasterService {
       .set('ConnName', this.auth.CompConn());
   return this.http.post(this.account + 'Employee/add-photo', formData,{params});
 }
+
+
+
 }

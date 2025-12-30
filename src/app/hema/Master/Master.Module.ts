@@ -5,15 +5,16 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { MasterRouting } from "./Master.routing";
 import { DialogModule } from 'primeng/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from "./login/login.component";
 import { GatepassComponent } from "./gatepass/gatepass.component";
-import { ReportEmployeeComponent } from "./report-employee/report-employee.component";
 import { GatepassAprroveComponent } from "./gatepass-aprrove/gatepass-aprrove.component";
 import { LeaveApproveComponent } from "./leave-approve/leave-approve.component";
 import { BarComponent } from "./bar/bar.component";
 import { ComparisionComponent } from "./comparision/comparision.component";
 import { StatusComponent } from "./status/status.component";
+
+import { PDFComponent } from "./pdf/pdf.component";
+
 
 @NgModule({
     declarations: [
@@ -26,12 +27,13 @@ import { StatusComponent } from "./status/status.component";
         EmployeeComponent ,DialogModule ,
        LoginComponent,
        GatepassComponent,
-       ReportEmployeeComponent,
+       PDFComponent,
        LeaveApproveComponent,
        GatepassAprroveComponent,
        BarComponent,
        ComparisionComponent,
-       StatusComponent
+       StatusComponent,
+       
 
     ]
 })

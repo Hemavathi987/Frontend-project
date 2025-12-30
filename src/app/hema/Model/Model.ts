@@ -140,3 +140,26 @@ export interface  Photo{
       AppUserId?: string;
     ConnName?: string;
 }
+// employee-update.dto.ts
+export interface EmployeeUpdateDTO {
+  CompanyId?: number;
+  Name?: string;
+  Age?: number;
+  Email?: string;
+  PhoneNumber?: number;
+  PhotoBase?: string;
+  Qualification?: string;
+  Department?: string;
+  Label?: string;
+
+  Address1?: string;
+  Address2?: string;
+  Address3?: string;
+  Address4?: string;
+  City?: string;
+  State?: string;
+  Pincode?: string;
+  Country?: string;
+
+  UpdatedDate?: Date;
+}

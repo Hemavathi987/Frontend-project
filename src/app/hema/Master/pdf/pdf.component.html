@@ -1,0 +1,91 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: brown;">Report</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar>
+
+                    <form [formGroup]="PdfValid" autocomplete="off">
+                        <div class="grid p-fluid"> <!-- ✅ Must have this wrapper -->
+
+                            <!-- LEFT COLUMN -->
+                            <div class="col-12 md:col-6">
+                                <div class="mb-3">
+                                    <span class="p-float-label w-100">
+                                        <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
+                                            class="form-control" [class.p-filled]="PdfValid.get('CompanyId')?.value" />
+                                        <label for="CompanyId">Company Id</label>
+                                    </span>
+                                    <div *ngIf="PdfValid.get('CompanyId')?.invalid && PdfValid.get('CompanyId')?.touched"
+                                        class="text-danger mt-1 fst-normal">
+                                        Please Enter Company Id
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RIGHT COLUMN -->
+                            <div class="col-12 md:col-6">
+                                <div class="mb-3">
+                                    <span class="p-float-label w-100">
+                                        <input type="text" pInputText id="Name" formControlName="Name"
+                                            class="form-control" [class.p-filled]="PdfValid.get('Name')?.value" />
+                                        <label for="Name">Name</label>
+                                    </span>
+                                    <div *ngIf="PdfValid.get('Name')?.invalid && PdfValid.get('Name')?.touched"
+                                        class="text-danger mt-1 fst-normal">
+                                        Please Enter Name
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </p-toolbar>
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+                        <!-- New -->
+                        <button pButton type="button" pTooltip="PDF" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="PDF()">
+                            PDF
+                        </button>
+                    </div>
+                </p-toolbar>
+                      <div #pdfContent id="pdfContent" class="p-4" >
+                     <img *ngIf="dtPhoto[0]?.PhotoBase" [src]="'data:image/jpeg;base64,' + dtPhoto[0].PhotoBase"
+                        width="120" />
+                     <div  *ngIf="dtEmployee.length > 0">
+                          <h3>Employee Details</h3>
+                    <p><b>Company Id:</b> {{ dtEmployee[0]?.CompanyId }}</p>
+                    <p><b>Name:</b> {{ dtEmployee[0]?.Name }}</p>
+                    <p><b>Age:</b> {{ dtEmployee[0]?.Age }}</p>
+                    <p><b>Email:</b> {{ dtEmployee[0]?.Email }}</p>
+                    </div>
+                    <hr>
+                  <div  *ngIf="dtStatus.length > 0">
+                   
+                    <p><b>Phone:</b> {{ dtStatus[0]?.PhoneNumber }}</p>
+                    <p><b>Qualification:</b> {{ dtStatus[0]?.Qualification }}</p>
+                    <p><b>Department:</b> {{ dtStatus[0]?.Department }}</p>
+                    </div>
+                    <hr>
+
+                    <div *ngIf="dtAdress.length > 0">
+                        <h3>Address</h3>
+                        <p>{{ dtAdress[0].Address1 }}</p>
+                        <p>{{ dtAdress[0].City }} - {{ dtAdress[0].Pincode }}</p>
+                        <p>{{ dtAdress[0].State }}, {{ dtAdress[0].Country }}</p>
+                    </div>
+
+                    <hr>
+
+                    <!-- PHOTO -->
+                  
+                </div>
+                <!-- PDF CONTENT -->
+            </p-accordion>
+           
+
+        </div>
+    </div>
+</div>

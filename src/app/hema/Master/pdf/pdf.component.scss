@@ -1,0 +1,8 @@
+.pdf-only {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 210mm;
+  opacity: 0; /* invisible but still rendered */
+  pointer-events: none;
+}

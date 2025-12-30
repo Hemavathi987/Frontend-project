@@ -30,11 +30,11 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "node_modules/primeflex/primeflex.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
+              "node_modules/primeflex/primeflex.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -53,19 +53,16 @@
                   "maximumError": "4kb"
                 }
               ],
-               "fileReplacements": [
+              "fileReplacements": [
                 {
                   "replace": "src/app/Folder/Environment.ts",
                   "with": "src/app/Folder/Environment.prod.ts"
                 }
               ],
-             
               "outputHashing": "all"
             },
-             "development": {
-             
+            "development": {
               "optimization": false,
-             
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true

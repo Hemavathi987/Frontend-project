@@ -9,12 +9,13 @@ import { EmployeeAdressComponent } from "./employee-adress/employee-adress.compo
 import { GatepassComponent } from "./gatepass/gatepass.component";
 import { authGuard } from "../Au/auth.guard";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { ReportEmployeeComponent } from "./report-employee/report-employee.component";
 import { GatepassAprroveComponent } from "./gatepass-aprrove/gatepass-aprrove.component";
 import { LeaveApproveComponent } from "./leave-approve/leave-approve.component";
 import { BarComponent } from "./bar/bar.component";
 import { ComparisionComponent } from "./comparision/comparision.component";
 import { StatusComponent } from "./status/status.component";
+import { PDFComponent } from "./pdf/pdf.component";
+
 
 // const routes: Routes = [
 //   { path: 'login', component: LoginComponent },
@@ -48,7 +49,7 @@ const routes: Routes = [
       { path: 'adress', component: EmployeeAdressComponent },
       { path: 'leave', component: LeaveComponent },
       { path: 'gate', component: GatepassComponent },
-      { path: 'report', component: ReportEmployeeComponent },
+      { path: 'report', component: PDFComponent },
       {path:'bar',component:BarComponent},
       {path:'comparision',component:ComparisionComponent},
       {path:'status',component:StatusComponent},
