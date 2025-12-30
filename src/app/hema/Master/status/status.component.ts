@@ -21,7 +21,7 @@ import { MasterStatus } from '../../Service/Status';
 @Component({
   selector: 'app-status',
   standalone: true,
-  imports: [ToastModule, TableModule, CalendarModule, PaginatorModule, AccordionModule, CommonModule, ToolbarModule, ReactiveFormsModule, DialogModule, ButtonDirective, TooltipModule, Button],
+  imports: [ToastModule, TableModule, CalendarModule,FloatLabelModule, PaginatorModule, AccordionModule, CommonModule, ToolbarModule, ReactiveFormsModule, DialogModule, ButtonDirective, TooltipModule, Button],
   providers: [MessageService, NgxSpinnerService],
   templateUrl: './status.component.html',
   styleUrl: './status.component.scss'

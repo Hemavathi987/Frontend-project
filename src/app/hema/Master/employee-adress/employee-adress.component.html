@@ -10,6 +10,7 @@
                         <!-- New -->
                         <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
                         </button>
+
                         <!-- Save -->
                         <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
                             class="p-button-success" (click)="Save()">
@@ -50,20 +51,15 @@
                                         (click)="CloseDeleteDailog()">
                                         No
                                     </p-button>
-
                                 </div>
                             </div>
-
                         </p-dialog>
-
-
                     </div>
                 </p-toolbar>
 
                 <form [formGroup]="AdressForm" autocomplete="off">
                     <div class="grid p-fluid"> <!-- ✅ Must have this wrapper -->
 
-                        <!-- LEFT COLUMN -->
                         <div class="col-12 md:col-6">
                             <div class="mb-3">
                                 <span class="p-float-label w-100">
@@ -226,11 +222,10 @@
                     </div>
                 </form>
                 <!--  Pop up-->
-                <p-dialog header="Employee Details" [(visible)]="displayPopup" [modal]="true" [closable]="true"
+                <p-dialog header="Employee Full Details" [(visible)]="displayViewPopup" [modal]="true" [closable]="true"
                     [style]="{width: '600px'}">
 
                     <h4>Employee Photo</h4>
-
                     <!-- Show photo -->
                     <div *ngIf="dtPhoto.length > 0 && dtPhoto[0].PhotoBase">
                         <img [src]="'data:image/png;base64,' + dtPhoto[0].PhotoBase" alt="Employee Photo" width="150"
@@ -258,11 +253,56 @@
 
                     <h4>Address</h4>
                     <p *ngIf="dtAdress.length > 0">
-                        {{dtAdress[0].Address1}}, {{dtAdress[0].Address2}}, {{dtAdress[0].City}}, {{dtAdress[0].State}},
+                        {{dtAdress[0].Address1}}, {{dtAdress[0].Address2}},{{dtAdress[0].Address3}}, {{dtAdress[0].City}}, {{dtAdress[0].State}},
                         {{dtAdress[0].Country}} - {{dtAdress[0].Pincode}}
                     </p>
 
                 </p-dialog>
+
+                <p-dialog header="Employee Details" [(visible)]="displayEditPopup" [modal]="true"
+                    [style]="{ width: '600px' }">
+
+                    <form [formGroup]="EditForm">
+                        <label style="font-style: italic;color: black;font-weight: bold;">CompanyId</label>
+                        <input pInputText formControlName="CompanyId"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">EmpName</label>
+                        <input pInputText formControlName="Name"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Age</label>
+                        <input pInputText formControlName="Age"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Email</label>
+                        <input pInputText formControlName="Email"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Phone PhoneNumber </label>
+                        <input pInputText formControlName="PhoneNumber"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Qualification</label>
+                        <input pInputText formControlName="Qualification" class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Department</label>
+                        <input pInputText formControlName="Department"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Address1</label>
+                        <input pInputText formControlName="Address1"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Address2</label>
+                        <input pInputText formControlName="Address2"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Address3</label>
+                        <input pInputText formControlName="Address3"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Address4</label>
+                        <input pInputText formControlName="Address4"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">City</label>
+                        <input pInputText formControlName="City"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">State</label>
+                        <input pInputText formControlName="State"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">Pincode</label>
+                        <input pInputText formControlName="Pincode"  class="w-full mb-2" />
+                         <label style="font-style: italic;color: black;font-weight: bold;">CompanyId</label>
+                        <input pInputText formControlName="Country"  class="w-full mb-2" />
+
+                        <div class="flex justify-content-end mt-3">
+                            <button pButton label="Update" class="p-button-success mr-2" (click)="UpdateEmployeeDetails()"></button>
+                            <button pButton label="Cancel" class="p-button-secondary"
+                                (click)="displayPopup=false"></button>
+                        </div>
+
+                    </form>
+                </p-dialog>
+
 
                 <!-- Peginator -->
                 <p-accordionTab header="EmployeeDetails">
@@ -332,9 +372,18 @@
         Previous
     </button>
 
-    <button pButton type="button" pTooltip="Next" tooltipPosition="right" appendTo="body" class="p-button-success mr-2"
-        (click)="Next()">
-        Full Info
-    </button>
-
+    <div class="flex justify-content-end">
+        <button pButton type="button" pTooltip="Next" tooltipPosition="right" appendTo="body"
+            class="p-button-success mr-2" (click)="Next()">
+            Full Info
+        </button>
+        <button pButton type="button" pTooltip="Edit" tooltipPosition="right" appendTo="body" class="mr-2"
+            (click)="Edit()">
+            Edit
+        </button>
+        <button pButton type="button" pTooltip="PDF" tooltipPosition="right" appendTo="body"
+            class="p-button-success mr-2" (click)="PDF()">
+            PDF
+        </button>
+    </div>
 </div>

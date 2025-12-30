@@ -47,7 +47,6 @@ export class MasterLoginService {
     };
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     return this.http.post(this.baseUrl + 'Add-Password', body, { headers });
   }
 

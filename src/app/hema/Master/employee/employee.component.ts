@@ -68,6 +68,7 @@ export class EmployeeComponent implements OnInit {
       Name: ['', Validators.required],
       Age: ['', Validators.required],
       Email: ['', Validators.required],
+      
       PhotoBase: ['', Validators.required]
     });
   }
@@ -167,7 +168,6 @@ export class EmployeeComponent implements OnInit {
        fd.append('PhotoBase', formValue.PhotoBase); 
         this.mastetService.AddPhoto(fd).subscribe({
           next: (res: Photo) => {
-       
             console.log("Photo Saved:", res);
           },
           error: (err) => {
@@ -207,11 +207,9 @@ export class EmployeeComponent implements OnInit {
   }
 
 
-
   onRowSelect(event: any) {
     this.isUpdateMode = true;
     const row: Employee = event.data; // <- get the row from event.data
-
     if (row) {
       this.EmployeeForm.patchValue({
         Id: row.Id ?? null,
@@ -329,11 +327,11 @@ export class EmployeeComponent implements OnInit {
         // this.dtEmployee = Array.isArray(data) && data.length ? data : [{ Id: 0 }];
         this.dtEmployee = Array.isArray(data.Data) ? data.Data : [];
         if (Array.isArray(data.Data)) {
-          this.dtEmployee = data.Data;
+          this.dtEmployee = data.Data;//Array
         }
         else if (data.Data) {
           this.dtEmployee = [data.Data];//// Data {Id: 3, CompanyId: 34678, Name: 'ChanduGowda TYYY', Age: 24, Email: 'Chandu@123'}
-        }
+        }//Object
         this.messageService.add({
           key: 'account',
           severity: 'success',
