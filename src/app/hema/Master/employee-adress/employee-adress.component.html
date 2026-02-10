@@ -1,27 +1,27 @@
 <div class="grid container-fluid">
     <div class="col-12">
-
         <p-toast key="account"></p-toast>
         <div class="card">
-            <h1 style="text-align: center; color: brown;">Employee Adress</h1>
+            <h1 style="text-align: center; color: #2f3e4e;">Employee Adress</h1>
             <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
                 <p-toolbar class="p-4 mt-4">
-                    <div class="p-toolbar-group-left  flex flex-wrap gap-2">
-                        <!-- New -->
-                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
-                        </button>
 
-                        <!-- Save -->
-                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
-                            class="p-button-success" (click)="Save()">
+                    <!-- LEFT GROUP -->
+                    <div class="p-toolbar-group-left flex flex-wrap gap-2">
+
+                        <button pButton label="New" style="border-radius: 10px;" icon="pi pi-plus" class="mr-2"
+                            (click)="Clear()"></button>
+
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Save" tooltipPosition="top"
+                            icon="pi pi-check" class="p-button-success" (click)="Save()">
                             Save
                         </button>
-                        <!-- Update -->
-                        <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger"
-                            (click)="OpenDailog()">
+
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Update"
+                            tooltipPosition="top" class="p-button-danger" (click)="OpenDailog()">
                             Update
                         </button>
-                        <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
+                           <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
                             showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
                             <span>Are You show You want to Update the Record?</span>
                             <div
@@ -33,12 +33,7 @@
                                 </p-button>
                             </div>
                         </p-dialog>
-                        <!-- Delete -->
-                        <button pButton type="button" pTooltip="Delete" tooltipPosition="top"
-                            class="p-button-danger mr-2" (click)="OpenDeleteDailog()">
-                            Delete
-                        </button>
-                        <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true"
+                           <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true"
                             showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
                             <span>Are You show You want to delete the Record?</span>
                             <div
@@ -54,7 +49,22 @@
                                 </div>
                             </div>
                         </p-dialog>
+
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Delete"
+                            tooltipPosition="top" class="p-button-danger mr-2" (click)="OpenDeleteDailog()">
+                            Delete
+                        </button>
+
                     </div>
+
+                    <!-- RIGHT GROUP -->
+                    <div class="p-toolbar-group-right">
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Send Email"
+                            tooltipPosition="Send Email" appendTo="body" class="mr-2" (click)="SendEmail()">
+                            Send Email
+                        </button>
+                    </div>
+
                 </p-toolbar>
 
                 <form [formGroup]="AdressForm" autocomplete="off">
@@ -224,39 +234,43 @@
                 <!--  Pop up-->
                 <p-dialog header="Employee Full Details" [(visible)]="displayViewPopup" [modal]="true" [closable]="true"
                     [style]="{width: '600px'}">
+                    <div #pdfContent id="pdfContents" class="pdf-only p-4">
+                        <h4>Employee Photo</h4>
+                        <!-- Show photo -->
+                        <div *ngIf="dtPhoto.length > 0 && dtPhoto[0].PhotoBase">
+                            <img [src]="'data:image/png;base64,' + dtPhoto[0].PhotoBase" alt="Employee Photo"
+                                width="150" height="150" style="border-radius: 8px;" />
+                        </div>
 
-                    <h4>Employee Photo</h4>
-                    <!-- Show photo -->
-                    <div *ngIf="dtPhoto.length > 0 && dtPhoto[0].PhotoBase">
-                        <img [src]="'data:image/png;base64,' + dtPhoto[0].PhotoBase" alt="Employee Photo" width="150"
-                            height="150" style="border-radius: 8px;" />
+                        <!-- No photo -->
+                        <div *ngIf="dtPhoto.length === 0 || !dtPhoto[0]?.PhotoBase">
+                            <p>No photo available</p>
+                        </div>
+                        <h4>Basic Info</h4>
+                        <p *ngIf="dtEmployee.length > 0">
+                            Name: {{dtEmployee[0].Name}} <br>
+                            Company ID: {{dtEmployee[0].CompanyId}} <br>
+                            Age: {{dtEmployee[0].Age}} <br>
+                            Email: {{dtEmployee[0].Email}} <br>
+                            DOB:{{dtEmployee[0].DOB}}
+                        </p>
+
+                        <h4>Status</h4>
+                        <p *ngIf="dtStatus.length > 0">
+                            Phone: {{dtStatus[0].PhoneNumber}} <br>
+                            Qualification: {{dtStatus[0].Qualification}} <br>
+                            Department: {{dtStatus[0].Department}} <br>
+                            JobRole : {{dtStatus[0].Jobrole}}<br>
+                            DOJ:{{dtStatus[0].DOJ}}
+                        </p>
+
+                        <h4>Address</h4>
+                        <p *ngIf="dtAdress.length > 0">
+                            {{dtAdress[0].Address1}}, {{dtAdress[0].Address2}},{{dtAdress[0].Address3}},
+                            {{dtAdress[0].City}}, {{dtAdress[0].State}},
+                            {{dtAdress[0].Country}} - {{dtAdress[0].Pincode}}
+                        </p>
                     </div>
-
-                    <!-- No photo -->
-                    <div *ngIf="dtPhoto.length === 0 || !dtPhoto[0]?.PhotoBase">
-                        <p>No photo available</p>
-                    </div>
-                    <h4>Basic Info</h4>
-                    <p *ngIf="dtEmployee.length > 0">
-                        Name: {{dtEmployee[0].Name}} <br>
-                        Company ID: {{dtEmployee[0].CompanyId}} <br>
-                        Age: {{dtEmployee[0].Age}} <br>
-                        Email: {{dtEmployee[0].Email}}
-                    </p>
-
-                    <h4>Status</h4>
-                    <p *ngIf="dtStatus.length > 0">
-                        Phone: {{dtStatus[0].PhoneNumber}} <br>
-                        Qualification: {{dtStatus[0].Qualification}} <br>
-                        Department: {{dtStatus[0].Department}}
-                    </p>
-
-                    <h4>Address</h4>
-                    <p *ngIf="dtAdress.length > 0">
-                        {{dtAdress[0].Address1}}, {{dtAdress[0].Address2}},{{dtAdress[0].Address3}}, {{dtAdress[0].City}}, {{dtAdress[0].State}},
-                        {{dtAdress[0].Country}} - {{dtAdress[0].Pincode}}
-                    </p>
-
                 </p-dialog>
 
                 <p-dialog header="Employee Details" [(visible)]="displayEditPopup" [modal]="true"
@@ -264,38 +278,45 @@
 
                     <form [formGroup]="EditForm">
                         <label style="font-style: italic;color: black;font-weight: bold;">CompanyId</label>
-                        <input pInputText formControlName="CompanyId"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">EmpName</label>
-                        <input pInputText formControlName="Name"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Age</label>
-                        <input pInputText formControlName="Age"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Email</label>
-                        <input pInputText formControlName="Email"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Phone PhoneNumber </label>
-                        <input pInputText formControlName="PhoneNumber"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Qualification</label>
+                        <input pInputText formControlName="CompanyId" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">EmpName</label>
+                        <input pInputText formControlName="Name" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Age</label>
+                        <input pInputText formControlName="Age" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Email</label>
+                        <input pInputText formControlName="Email" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">DOB</label>
+                        <input pInputText formControlName="DOB" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Phone PhoneNumber </label>
+                        <input pInputText formControlName="PhoneNumber" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Qualification</label>
                         <input pInputText formControlName="Qualification" class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Department</label>
-                        <input pInputText formControlName="Department"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Address1</label>
-                        <input pInputText formControlName="Address1"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Address2</label>
-                        <input pInputText formControlName="Address2"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Address3</label>
-                        <input pInputText formControlName="Address3"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Address4</label>
-                        <input pInputText formControlName="Address4"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">City</label>
-                        <input pInputText formControlName="City"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">State</label>
-                        <input pInputText formControlName="State"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">Pincode</label>
-                        <input pInputText formControlName="Pincode"  class="w-full mb-2" />
-                         <label style="font-style: italic;color: black;font-weight: bold;">CompanyId</label>
-                        <input pInputText formControlName="Country"  class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Department</label>
+                        <input pInputText formControlName="Department" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">JobRole</label>
+                        <input pInputText formControlName="Jobrole" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">DOJ</label>
+                        <input pInputText formControlName="DOJ" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Address1</label>
+                        <input pInputText formControlName="Address1" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Address2</label>
+                        <input pInputText formControlName="Address2" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Address3</label>
+                        <input pInputText formControlName="Address3" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Address4</label>
+                        <input pInputText formControlName="Address4" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">City</label>
+                        <input pInputText formControlName="City" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">State</label>
+                        <input pInputText formControlName="State" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">Pincode</label>
+                        <input pInputText formControlName="Pincode" class="w-full mb-2" />
+                        <label style="font-style: italic;color: black;font-weight: bold;">CompanyId</label>
+                        <input pInputText formControlName="Country" class="w-full mb-2" />
 
                         <div class="flex justify-content-end mt-3">
-                            <button pButton label="Update" class="p-button-success mr-2" (click)="UpdateEmployeeDetails()"></button>
+                            <button pButton label="Update" class="p-button-success mr-2"
+                                (click)="UpdateEmployeeDetails()"></button>
                             <button pButton label="Cancel" class="p-button-secondary"
                                 (click)="displayPopup=false"></button>
                         </div>
@@ -314,7 +335,6 @@
 
                         <ng-template pTemplate="caption">
                             <span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
                                 <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
                                     placeholder="Search" />
                             </span>
@@ -367,22 +387,22 @@
 </div>
 <div style="display: flex; justify-content: space-between; align-items: center;">
 
-    <button pButton type="button" pTooltip="Previous" tooltipPosition="right" appendTo="body" class="p-button-info mr-2"
-        (click)="Previous()">
+    <button pButton type="button" style="border-radius: 10px;" pTooltip="Previous" tooltipPosition="right"
+        appendTo="body" class="p-button-info mr-2" (click)="Previous()">
         Previous
     </button>
 
     <div class="flex justify-content-end">
-        <button pButton type="button" pTooltip="Next" tooltipPosition="right" appendTo="body"
-            class="p-button-success mr-2" (click)="Next()">
+        <button pButton type="button" style="border-radius: 10px;" pTooltip="Next" tooltipPosition="right"
+            appendTo="body" class="p-button-success mr-2" (click)="Next()">
             Full Info
         </button>
-        <button pButton type="button" pTooltip="Edit" tooltipPosition="right" appendTo="body" class="mr-2"
-            (click)="Edit()">
+        <button pButton type="button" style="border-radius: 10px;" pTooltip="Edit" tooltipPosition="right"
+            appendTo="body" class="mr-2" (click)="Edit()">
             Edit
         </button>
-        <button pButton type="button" pTooltip="PDF" tooltipPosition="right" appendTo="body"
-            class="p-button-success mr-2" (click)="PDF()">
+        <button pButton type="button" style="border-radius: 10px;" pTooltip="PDF" tooltipPosition="right"
+            appendTo="body" class="p-button-success mr-2" (click)="PDF()">
             PDF
         </button>
     </div>

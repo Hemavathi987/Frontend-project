@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ToolbarModule } from "primeng/toolbar";
 import { ToastModule } from "primeng/toast";
 import { AccordionModule } from "primeng/accordion";
@@ -28,8 +28,10 @@ export class LeaveApproveComponent {
   SelectRecord: any;
   reject = false;
   aprove = false;
+  
   ngOnInit(): void {
     this.getadmin();
+ 
   }
 
   constructor(private messageService: MessageService,
@@ -182,5 +184,6 @@ export class LeaveApproveComponent {
     this.index = num.index;
   }
 
+ 
 
 }

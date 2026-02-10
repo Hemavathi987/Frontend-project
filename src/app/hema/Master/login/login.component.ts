@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   loginUser: Password = {};
   passwordForm!: FormGroup;
 
-  backgroundUrl: string = 'assets/images/hema.jpg.jpg';
+  backgroundUrl: string = 'assets/images/passwordimage.jpg.jpg';
 
   constructor(
     private fb: FormBuilder,
@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit {
               key: 'login',
               severity: 'error',
               summary: 'Error',
-              detail: err,
+              detail: err || 'Something wnt wrong,Cannot Login',
               life: 3000
             });
             return;

@@ -14,6 +14,12 @@ import { ComparisionComponent } from "./comparision/comparision.component";
 import { StatusComponent } from "./status/status.component";
 
 import { PDFComponent } from "./pdf/pdf.component";
+import { SalaryCalculatorComponent } from "./salary-calculator/salary-calculator.component";
+import { CheckMonthlySalaryComponent } from "./check-monthly-salary/check-monthly-salary.component";
+import { ResignationComponent } from "./resignation/resignation.component";
+import { CheckResignationComponent } from "./check-resignation/check-resignation.component";
+import { BioDataComponent } from "./bio-data/bio-data.component";
+import { KKKKKKComponent } from "../../kkkkkk/kkkkkk.component";
 
 
 @NgModule({
@@ -33,6 +39,12 @@ import { PDFComponent } from "./pdf/pdf.component";
        BarComponent,
        ComparisionComponent,
        StatusComponent,
+       SalaryCalculatorComponent,
+       CheckMonthlySalaryComponent,
+       ResignationComponent,
+       CheckResignationComponent,
+       BioDataComponent,
+       KKKKKKComponent
        
 
     ]

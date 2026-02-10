@@ -2,21 +2,27 @@
     <div class="col-12">
         <p-toast key="account"></p-toast>
         <div class="card">
-            <h1 style="text-align: center; color: brown;">Employee Leaves</h1>
+            <h1 style="text-align: center; color: #2f3e4e;">Employee Leaves</h1>
             <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
                 <p-toolbar class="p-4 mt-4">
-                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
+                   <div class="p-toolbar-group-left flex flex-wrap gap-2">
                         <!-- New -->
-                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
+                           <button pButton type="button" style="border-radius: 10px;"  pTooltip="Serach" tooltipPosition="top"  icon="pi pi-search"
+                            class="p-button-success" (click)="Details()">
+                            Serach
+                        </button>
+                        <button pButton label="New" style="border-radius: 10px;"  icon="pi pi-plus" class="mr-2" (click)="Clear()">
                         </button>
                         <!-- Save -->
-                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
                             class="p-button-success" (click)="Save()">
                             Save
                         </button>
-                        <button pButton type="button" pTooltip="Status" tooltipPosition="top" icon="pi pi-check"
-                            class="p-button-success" (click)="Details()">
-                            Leave Status
+                    </div>
+                      <div class="p-toolbar-group-right">
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Status" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="StatusDetails()">
+                           Leave Status
                         </button>
                     </div>
                 </p-toolbar>
@@ -144,11 +150,11 @@
                     <div class="text-center p-3">
                         <h3>Employee: {{ selectedEmpName }}</h3>
                         <p>Status: <strong>{{ selectedLeaveStatus }}</strong></p>
-                        <p *ngIf="selectedLeaveStatus === 'Approved'" style="color:green;">This leave has been approved.
+                        <p *ngIf="selectedLeaveStatus === 'Approved'" style="color:green;">Admine had Approved the leave
                         </p>
-                        <p *ngIf="selectedLeaveStatus === 'Rejected'" style="color:red;">This leave has been rejected.
+                        <p *ngIf="selectedLeaveStatus === 'Rejected'" style="color:red;">Admine had Rejected the leave.
                         </p>
-                        <p *ngIf="selectedLeaveStatus === 'Pending'" style="color:orange;">This leave is still pending.
+                        <p *ngIf="selectedLeaveStatus === 'Pending'" style="color:orange;">Admine still put these leave on pending.
                         </p>
                     </div>
                     <p-footer>
@@ -167,7 +173,7 @@
 
                         <ng-template pTemplate="caption">
                             <span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
+                               
                                 <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
                                     placeholder="Search" />
                             </span>

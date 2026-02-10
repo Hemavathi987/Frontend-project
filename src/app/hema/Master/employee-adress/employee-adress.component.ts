@@ -15,18 +15,16 @@ import { CommonModule, formatDate } from '@angular/common';
 import { Table, TableModule, TableRowSelectEvent } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { onGlobalTableFilter } from '../../../Folder/global.filter';
-import { FloatLabelModule } from 'primeng/floatlabel';
 import { Router } from '@angular/router';
 import { MasterService } from '../../Service/Service';
-
-
-
+import html2pdf from 'html2pdf.js';
+type EmployeeAction = 'VIEW' | 'PDF';
 
 
 @Component({
   selector: 'app-employee-adress',
   standalone: true,
-  imports: [ToastModule, TableModule, CalendarModule, PaginatorModule, AccordionModule, CommonModule, ToolbarModule, ReactiveFormsModule, DialogModule, ButtonDirective, TooltipModule, Button],
+  imports: [ToastModule, TableModule, CalendarModule, PaginatorModule, AccordionModule, CommonModule, ToolbarModule, ReactiveFormsModule, DialogModule, ButtonDirective, TooltipModule],
   providers: [MessageService, NgxSpinnerService],
   templateUrl: './employee-adress.component.html',
   styleUrl: './employee-adress.component.scss'
@@ -57,6 +55,7 @@ export class EmployeeAdressComponent implements OnInit {
     this.ValidationForm();
     this.valid();
     this.getAdress();
+
   }
 
 
@@ -76,10 +75,13 @@ export class EmployeeAdressComponent implements OnInit {
       Name: ['', Validators.required],
       Age: [''],
       Email: [''],
+      DOB: [''],
       PhoneNumber: [''],
       PhotoBase: [''],
       Qualification: [''],
       Department: [''],
+      Jobrole: [''],
+      DOJ: [''],
       Label: [''],
       Address1: [''],
       Address2: [''],
@@ -154,8 +156,6 @@ export class EmployeeAdressComponent implements OnInit {
   Save() {
     if (this.AdressForm.valid) {
       this.spinner.show();
-
-
       this.AdressForm.value.Id =
         this.AdressForm.value.Id === null ? 0 :
           this.AdressForm.value.Id;
@@ -238,7 +238,7 @@ export class EmployeeAdressComponent implements OnInit {
   }
   Delete() {
     this.spinner.show();
-    this.masterservice.iddeletemployeeadress(this.AdressForm.value.EmpName).subscribe({
+    this.masterservice.iddeletemployeeadress(this.AdressForm.value.EmpName,this.AdressForm.value.CompanyId).subscribe({
       next: (data: any) => {
         this.Clear();
         this.getAdress();
@@ -261,6 +261,16 @@ export class EmployeeAdressComponent implements OnInit {
           detail: err?.error?.Message || 'Something went wrong',
           life: 3000,
         });
+            if (err.status === 403 || err.status === 400) {
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Delete the Data.',
+            life: 4000,
+          });
+          return;
+        }
         this.spinner.hide();
       }
 
@@ -313,6 +323,16 @@ export class EmployeeAdressComponent implements OnInit {
           detail: err?.error?.Message || 'Something went wrong',
           life: 3000,
         });
+            if (err.status === 403 || err.status === 400) {
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Update the Data.',
+            life: 4000,
+          });
+          return;
+        }
         this.spinner.hide();
       }
     });
@@ -329,10 +349,10 @@ export class EmployeeAdressComponent implements OnInit {
     this.displayEditPopup = false;
     const compId = this.AdressForm.value.CompanyId;//gives you all the current values of the form as a plain object.
     const empName = this.AdressForm.value.EmpName;  // or from form/control  
-    this.getEmployee2(compId, empName);
+    this.getEmployee2(compId, empName, 'VIEW');
   }
 
-  getEmployee2(CompId: number, EmpName: string) {
+  getEmployee2(CompId: number, EmpName: string, action: EmployeeAction) {
     if (!this.validateBasicFields())
       return;
     this.spinner.show();
@@ -349,7 +369,8 @@ export class EmployeeAdressComponent implements OnInit {
             CompanyId: empData.CompanyId,
             Name: empData.Name,
             Age: empData.Age,
-            Email: empData.Email
+            Email: empData.Email,
+            DOB: empData.DOB
           }];
           this.dtPhoto = [{
             CompanyId: empData.CompanyId,
@@ -362,7 +383,122 @@ export class EmployeeAdressComponent implements OnInit {
             EmpName: empData.Name,
             PhoneNumber: empData.PhoneNumber,
             Qualification: empData.Qualification,
-            Department: empData.Department
+            Department: empData.Department,
+            Jobrole: empData.Jobrole,
+            DOJ: empData.DOJ
+          }];
+
+          this.dtAdress = [{
+            CompanyId: empData.CompanyId,
+            EmpName: empData.Name,
+            Label: empData.Label,
+            Address1: empData.Address1,
+            Address2: empData.Address2,
+            Address3: empData.Address3,
+            Address4: empData.Address4,
+            City: empData.City,
+            State: empData.State,
+            Pincode: empData.Pincode,
+            Country: empData.Country,
+            UpdatedDate: empData.UpdatedDate
+          }];
+          if (action === 'VIEW') {
+            this.displayViewPopup = true;
+          }
+
+          if (action === 'PDF') {
+            this.displayViewPopup = true; // ensure content is visible
+            setTimeout(() => {
+              this.generatePDF();
+            }, 300); // 👈 critical
+          }
+
+
+          this.messageservice.add({
+            key: 'account',
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Employee contain all the information',
+            life: 3000
+          });
+
+        } else {
+          console.warn('⚠️ Unexpected response format:', res);
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Not Found',
+            detail: 'Employee does not contain all the information or invalid response',
+            life: 3000,
+          });
+        }
+        //973152(Keeru) \\  997257(Jain)
+        this.spinner.hide();
+      },
+
+      error: (err) => {
+        this.spinner.hide();
+        this.messageservice.add({
+          key: 'account',
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error?.Message || 'Employee does not contain all the information',
+          life: 3000,
+        });
+        if (err.status === 403 || err.status === 400) {
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Get the Data.',
+            life: 4000,
+          });
+          return;
+        }
+      },
+    });
+  }
+
+  SendEmail() {
+    this.displayEditPopup = false;
+    const compId = this.AdressForm.value.CompanyId;//gives you all the current values of the form as a plain object.
+    const empName = this.AdressForm.value.EmpName;  // or from form/control  
+    this.SendEmailgetEmployee2(compId, empName);
+  }
+  SendEmailgetEmployee2(CompId: number, EmpName: string) {
+    if (!this.validateBasicFields())
+      return;
+    this.spinner.show();
+
+    this.mastetService.EmailAlredycreatedfullemployeeInformation(CompId, EmpName).subscribe({
+      next: (data: any) => {
+        console.log('🟢 Full API raw response:', data);
+        const res = data?.body ? data.body : data;
+
+        if (res?.Status?.toLowerCase?.() === 'success' && res?.Data) {
+          const empData = res.Data;
+
+          this.dtEmployee = [{
+            CompanyId: empData.CompanyId,
+            Name: empData.Name,
+            Age: empData.Age,
+            Email: empData.Email,
+            DOB: empData.DOB
+          }];
+          this.dtPhoto = [{
+            CompanyId: empData.CompanyId,
+            Name: empData.Name,
+            PhotoBase: empData.PhotoBase
+          }]
+
+          this.dtStatus = [{
+            CompanyId: empData.CompanyId,
+            EmpName: empData.Name,
+            PhoneNumber: empData.PhoneNumber,
+            Qualification: empData.Qualification,
+            Department: empData.Department,
+            DOJ: empData.DOJ,
+            Jobrole: empData.Jobrole
           }];
 
           this.dtAdress = [{
@@ -412,10 +548,19 @@ export class EmployeeAdressComponent implements OnInit {
           detail: err?.error?.Message || 'Employee does not contain all the information',
           life: 3000,
         });
+        if (err.status === 403 || err.status === 400) {
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Send  Email.',
+            life: 4000,
+          });
+          return;
+        }
       },
     });
   }
-
 
   Edit() {
     if (!this.validateBasicFields()) return;
@@ -435,10 +580,13 @@ export class EmployeeAdressComponent implements OnInit {
       Name: this.dtEmployee[0].Name,
       Age: this.dtEmployee[0].Age,
       Email: this.dtEmployee[0].Email,
+      DOB: this.dtEmployee[0].DOB,
 
       PhoneNumber: this.dtStatus[0].PhoneNumber,
       Qualification: this.dtStatus[0].Qualification,
       Department: this.dtStatus[0].Department,
+      Jobrole: this.dtStatus[0].Jobrole,
+      DOJ: this.dtStatus[0].DOJ,
 
       PhotoBase: this.dtPhoto[0].PhotoBase,
 
@@ -496,25 +644,32 @@ export class EmployeeAdressComponent implements OnInit {
           summary: 'Error',
           detail: err?.error?.Message || 'Update failed'
         });
+        if (err.status === 403 || err.status === 400) {
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Edit the Data.',
+            life: 4000,
+          });
+          return;
+        }
       }
     });
   }
 
-  ShowMessageEdit() {
-    this.messageservice.add({
-      key: 'account',
-      severity: 'warn',
-      summary: 'Warning',
-      detail: 'Please check Full Information Employee Details Before Editing',
-      life: 3000
-    });
-  }
+ ShowMessageEdit() {
+  this.messageservice.add({
+    key: 'account',
+    severity: 'warn',
+    summary: 'Warning',
+    detail: 'Please check Full Information Employee Details Before Editing',
+    life: 3000
+  });
+}
 
-  PDF() {
-    if (!this.validateBasicFields()) {
-      return;
-    }
-  }
+
+
   validateBasicFields(): boolean {
     const companyId = this.AdressForm.get('CompanyId');//This returns the FormControl object itself.
     const empName = this.AdressForm.get('EmpName');
@@ -522,10 +677,10 @@ export class EmployeeAdressComponent implements OnInit {
     //FormControl object
     companyId?.markAsTouched();
     empName?.markAsTouched();
-   
+
 
     if (companyId?.invalid || empName?.invalid)//empty,custom validator that fails,Control is disabled,pattern validator that fails
-       {
+    {
       this.messageservice.add({
         key: 'account',
         severity: 'error',
@@ -534,8 +689,33 @@ export class EmployeeAdressComponent implements OnInit {
       });
       return false;
     }
-
-
     return true;
   }
+
+
+  generatePDF() {
+    const element = document.getElementById('pdfContents');
+    if (!element) return;
+    const options: any = {
+      margin: 10,
+      filename: 'Employee_Report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    };
+    html2pdf().from(element).set(options).save();
+  }
+
+
+  PDF() {
+    this.displayEditPopup = false;
+    const compId = this.AdressForm.value.CompanyId;//gives you all the current values of the form as a plain object.
+    const empName = this.AdressForm.value.EmpName;  // or from form/control  
+    this.getEmployee2(compId, empName, 'PDF');
+  }
+
+
 }
+
+

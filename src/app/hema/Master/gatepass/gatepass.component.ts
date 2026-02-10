@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ToolbarModule } from "primeng/toolbar";
 import { AccordionModule } from "primeng/accordion";
 import { ToastModule } from "primeng/toast";
@@ -16,20 +16,28 @@ import { onGlobalTableFilter } from '../../../Folder/global.filter';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { formatDate } from '@angular/common';
+import { retry } from 'rxjs';
+import { LeaveComponent } from '../leave/leave.component';
+import { LeaveApproveComponent } from "../leave-approve/leave-approve.component";
+type EmployeeAction = 'VIEW' | 'STATUS';
+
+
 @Component({
   selector: 'app-gatepass',
   standalone: true,
-  imports: [ToolbarModule, CheckboxModule, PaginatorModule, AccordionModule, ReactiveFormsModule, ToastModule, CommonModule, CalendarModule, DialogModule, TableModule],
+  imports: [ToolbarModule, CheckboxModule, LeaveComponent, PaginatorModule, AccordionModule, ReactiveFormsModule, ToastModule, CommonModule, CalendarModule, DialogModule, TableModule],
   providers: [MessageService, NgxSpinnerService],
   templateUrl: './gatepass.component.html',
   styleUrl: './gatepass.component.scss'
 })
 export class GatepassComponent implements OnInit {
 
-selectedGatePass: string = '';
-showStatusDialog: boolean = false;
-selectedEmpName: string = '';
 
+ 
+
+  selectedGatePass: string = '';
+  showStatusDialog: boolean = false;
+  selectedEmpName: string = '';
   index: any;
   dtgatepass: GatePass[] = [];
   displayUpdate = false;
@@ -47,9 +55,29 @@ selectedEmpName: string = '';
 
   ) { }
 
+   
+
+  
+
+
+  selectedLeave = {
+    EmpName: 'Ravi Kumar',
+    Reason: 'Medical'
+  };
+
+showLeaveComponent = false;
+handleLeaveSaved(data: any) {
+  console.log('Child sent data to parent:', data);
+  this.showLeaveComponent = false;
+  // You can save to backend or update your table here
+}
+  
+
+
   ngOnInit() {
     this.formbuilder();
-    this.getpass()
+    console.log("child to parent",this.selectedLeave)
+    //this.getpass()
   }
 
   formbuilder() {
@@ -193,6 +221,16 @@ selectedEmpName: string = '';
             summary: 'Error',
             detail: err.error.Message || 'something went wrong'
           });
+           if (err.status === 403 || err.status === 400) {
+          this.messageserveice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Add.',
+            life: 4000,
+          });
+          return;
+        }
         },
       })
     }
@@ -225,68 +263,97 @@ selectedEmpName: string = '';
         })
     })
   }
-
-
- Details() {
-   
-     const EmpName = prompt('Enter Name');
-    if (!EmpName) {
-      this.messageserveice.add({ severity: 'warn', summary: 'Cancelled', detail: 'Name is required' });
-      return;
+  validateBasicFields(): boolean {
+    const companyId = this.gatepassform.get('CompId');//This returns the FormControl object itself.
+    const empName = this.gatepassform.get('EmployeeName');
+    //You can then check its state (valid/invalid, touched/dirty) or call methods like markAsTouched().
+    //FormControl object
+    companyId?.markAsTouched();
+    empName?.markAsTouched();
+    if (empName?.invalid || companyId?.invalid)//empty,custom validator that fails,Control is disabled,pattern validator that fails
+    {
+      this.messageserveice.add({
+        key: 'account',
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Company Id and Employee Name are required'
+      });
+      return false;
     }
+    return true;
+  }
 
-  const Compstr = prompt('Enter Company Id');
-    if (!Compstr) {
-      this.messageserveice.add({ severity: 'warn', summary: 'Cancelled', detail: 'Company is required' });
-      return;
-    }
+  Details() {
+    const compId = this.gatepassform.value.CompId;//gives you all the current values of the form as a plain object.
+    const empName = this.gatepassform.value.EmployeeName;
+    this.Status(empName, compId, 'VIEW');
+  }
 
-    const CompId = Number(Compstr);
-    if (!CompId) {
-      this.messageserveice.add({ severity: 'error', summary: 'Invalid CompanyID', detail: 'CompanyID must be a number' });
-      return;
-    }
- 
-    this.Status(EmpName,CompId)
+  StatusDetails() {
+    const compId = this.gatepassform.value.CompId;//gives you all the current values of the form as a plain object.
+    const empName = this.gatepassform.value.EmployeeName;
+    this.Status(empName, compId, 'STATUS');
   }
 
 
-  Status(EmpName: string,CompId : number) {
-  this.spinner.show();
-  this.servicemodule.StatusCheck(EmpName,CompId).subscribe({
-    next: (Data: any) => {
-      console.log("Data Approved or not", Data);
-     const leaves = Data.Data 
-                     ? (Array.isArray(Data.Data) ? Data.Data : [Data.Data])
-                     : [];
-      if (leaves.length === 0) {
+  Status(EmployeeName: string, CompId: number, action: EmployeeAction) {
+    if (!this.validateBasicFields())
+      return
+    this.spinner.show();
+    this.servicemodule.StatusCheck(EmployeeName, CompId).subscribe({
+      next: (Data: any) => {
+        console.log("Data Approved or not", Data);
+        const leaves = Data.Data
+          ? (Array.isArray(Data.Data) ? Data.Data : [Data.Data])
+          : [];
+
+       if (action === 'VIEW') {
+          if (Array.isArray(Data.Data)) {
+            this.dtgatepass = Data.Data;
+          }
+          else if (Data.Data) {
+            this.dtgatepass = [Data.Data];
+          }
+          this.messageserveice.add({
+            key: 'account',
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Successful get the record'
+          });
+          this.spinner.hide();
+        }
+
+        if (action === 'STATUS') {
+          this.showStatusDialog = true;
+
+          this.selectedEmpName = leaves[0].EmpName;
+          this.selectedGatePass = leaves[0].Status; // e.g., 'Approved' or 'Rejected'
+          this.showStatusDialog = true; // show popup
+        }
+        this.spinner.hide();
+      },
+
+      error: (err) => {
+        this.spinner.hide();
         this.messageserveice.add({
           key: 'account',
           severity: 'warn',
-          summary: 'No Data',
-          detail: 'No GatePass records found for this employee',
+          summary: 'Error',
+          detail: 'GatePass cannot be retrieved',
           life: 2000
         });
-      } else {
-        // Assuming you take the first leave record for the popup
-        this.selectedEmpName = leaves[0].EmpName;
-        this.selectedGatePass = leaves[0].Status; // e.g., 'Approved' or 'Rejected'
-        this.showStatusDialog = true; // show popup
+            if (err.status === 403 || err.status === 400) {
+          this.messageserveice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Get the Data.',
+            life: 4000,
+          });
+          return;
+        }
       }
-
-      this.spinner.hide();
-    },
-    error: (err) => {
-      this.spinner.hide();
-      this.messageserveice.add({
-        key: 'account',
-        severity: 'warn',
-        summary: 'Error',
-        detail: 'GatePass cannot be retrieved',
-        life: 2000
-      });
-    }
-  });
-}
+    });
+  }
 
 }

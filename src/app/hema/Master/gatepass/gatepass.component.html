@@ -2,22 +2,20 @@
     <div class="col-12">
         <p-toast key="account"></p-toast>
         <div class="card">
-            <h1 style="text-align: center; color: brown;">Employee Gate Pass</h1>
+            <h1 style="text-align: center; color: #2f3e4e;">Employee Gate Pass</h1>
             <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
                 <p-toolbar class="p-4 mt-4">
-                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
-
-                        <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="Clear()">
+                     <div class="p-toolbar-group-left flex flex-wrap gap-2">
+                          <button pButton type="button" style="border-radius: 10px;"  pTooltip="Search" tooltipPosition="top" icon="pi pi-search"
+                            class="p-button-success" (click)="Details()">
+                            Search
+                        </button>
+                        <button pButton label="New" style="border-radius: 10px;"  icon="pi pi-plus" class="mr-2" (click)="Clear()">
                         </button>
                         <!-- Save -->
-                        <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
                             class="p-button-success" (click)="Save()">
                             Save
-                        </button>
-                        <!-- Update -->
-                        <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger"
-                            (click)="OpenDailog()">
-                            Update
                         </button>
                         <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
                             showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
@@ -31,9 +29,11 @@
                                 </p-button>
                             </div>
                         </p-dialog>
-                          <button pButton type="button" pTooltip="Status" tooltipPosition="top" icon="pi pi-check"
-                            class="p-button-success" (click)="Details()">
-                            GatePass Status
+                     </div>
+                      <div class="p-toolbar-group-right">
+                          <button pButton type="button" style="border-radius: 10px;"  pTooltip="Status" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="StatusDetails()">
+                           GatePass Status
                         </button>
                         
                     </div>
@@ -231,7 +231,7 @@
 
                         <ng-template pTemplate="caption">
                             <span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
+                               
                                 <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
                                     placeholder="Search" />
                             </span>
@@ -284,4 +284,14 @@
             </p-accordion>
         </div>
     </div>
+   
 </div>
+<button (click)="showLeaveComponent = true">Open Leave</button>
+
+<app-leave
+  *ngIf="showLeaveComponent"
+  [selectedLeave]="selectedLeave"
+  [show]="true"
+  (leaveSaved)="handleLeaveSaved($event)"
+  (closed)="showLeaveComponent = false"
+></app-leave>

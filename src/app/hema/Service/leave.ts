@@ -35,12 +35,13 @@ export class MasterLeave {
         });
     }
     //check Status
-    getidLeave(EmpName : string): Observable<any> {
+    getidLeave(EmpName : string,CompanyId : number): Observable<any> {
   const params = new HttpParams()
        .set('EmpName',EmpName)
+       .set('CompanyId',CompanyId)
         .set('appUserID',this.auth.UserID())
         .set('ConnName',this.auth.CompConn());
-        return this.http.get(this.account+'get-id-Leave/'+EmpName,{params});
+        return this.http.get(this.account+'get-id-Leave/'+EmpName+'/'+CompanyId,{params});
     }
     //ADMINE
     Adminepending(): Observable<any> {

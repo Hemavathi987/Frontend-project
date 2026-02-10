@@ -1,0 +1,45 @@
+<div class="dashboard">
+
+  <div class="card working" (click)="WorkingEmployees()">
+    <h4>Working Employees</h4>
+    <h2>{{ workingEmployeeCount }}</h2>
+  </div>
+
+  <div class="card resigned" (click)="ResignEmployees()">
+    <h4>Resigned Employees</h4>
+    <h2>{{ TotalResign }}</h2>
+  </div>
+
+  <div class="card leave" (click)="LeaveEmployees()">
+    <h4>On Leave</h4>
+    <h2>{{TotalLeave}}</h2>
+  </div>
+
+  <div class="card total" (click)="TotalEmployees()">
+    <h4>Total Employees</h4>
+    <h2>{{totalEmployees}}</h2>
+  </div>
+
+
+  <div class="card Hr" (click)="HrEmployees()">
+    <h4>HR</h4>
+    <h2>{{HrCount}}</h2>
+  </div>
+
+
+
+  <div class="card Tester" (click)="TesterEmployees()">
+    <h4>Tester </h4>
+    <h2>{{TesterCount}}</h2>
+  </div>
+
+  <div class="card Developer" (click)="DeveloperEmployees()">
+    <h4>Developer </h4>
+    <h2>{{DeveloperCount}}</h2>
+  </div>
+  
+  <div class="card IT" (click)="ITEmployees()">
+    <h4>IT Support</h4>
+    <h2>{{ITSupportCount}}</h2>
+  </div>
+</div>

@@ -1,10 +1,11 @@
 export interface Employee {
-   
+
     Id?: number;
     CompanyId?: number;
     Name?: string;
     Age?: number;
     Email?: string;
+    DOB?: Date,
     OTP?: string;
     AppUserId?: string;
     ConnName?: string;
@@ -122,44 +123,79 @@ export interface StatusEmployee {
     PhoneNumber?: number;
     Qualification?: string;
     Department?: string;
+    DOJ?: Date;
+    Jobrole?: string;
+    OnBoarding?: string;
     AppUserId?: string;
     ConnName?: string;
 }
-export interface  Password{
-    Id?  :number;
-   UserName?  : string;
-    Passwords? : string;
-    Role? : string;
-   Token? : string
+export interface Password {
+    Id?: number;
+    UserName?: string;
+    Passwords?: string;
+    Role?: string;
+    Token?: string
 }
-export interface  Photo{
-    Id?  :number;
-  CompanyId?  :number;
-    Name? : string;
-   PhotoBase? : string;
-      AppUserId?: string;
+export interface Photo {
+    Id?: number;
+    CompanyId?: number;
+    Name?: string;
+    PhotoBase?: string;
+    AppUserId?: string;
     ConnName?: string;
 }
 // employee-update.dto.ts
 export interface EmployeeUpdateDTO {
-  CompanyId?: number;
-  Name?: string;
-  Age?: number;
-  Email?: string;
-  PhoneNumber?: number;
-  PhotoBase?: string;
-  Qualification?: string;
-  Department?: string;
-  Label?: string;
+    CompanyId?: number;
+    Name?: string;
+    Age?: number;
+    Email?: string;
+    PhoneNumber?: number;
+    PhotoBase?: string;
+    Qualification?: string;
+    Department?: string;
+    Label?: string;
 
-  Address1?: string;
-  Address2?: string;
-  Address3?: string;
-  Address4?: string;
-  City?: string;
-  State?: string;
-  Pincode?: string;
-  Country?: string;
+    Address1?: string;
+    Address2?: string;
+    Address3?: string;
+    Address4?: string;
+    City?: string;
+    State?: string;
+    Pincode?: string;
+    Country?: string;
 
-  UpdatedDate?: Date;
+    UpdatedDate?: Date;
+}
+
+export interface Resignation {
+    Id?: number;
+    EmpName?: string;
+    CompId?: number;
+    ResignStatus?: string;
+    ResignApplyDate?: Date;
+    ResignApproveDate?: Date;
+    ResignReason?: string;
+     AppUserId?: string;
+    ConnName?: string;
+
+}
+
+export interface MonthlySalary {
+    Id?: number;
+    CompanyId?: number;
+    Name?: string;
+    Days?: number;
+    DailyWages?: number;
+    Salary?: number;
+    LPA?: number;
+    Tax?: number;
+    PF?: number;
+    HealthInsurance?: number;
+    TotalSalaryPerYear?: number;
+    MonthlySalaryEmployee?: number;
+    Monthly?: string;
+    Year?: number;
+    AppUserId?: string;
+    ConnName?: string;
 }

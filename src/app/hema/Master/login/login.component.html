@@ -7,64 +7,87 @@
     'width': '100%'
   }" class="d-flex flex-column">
 
-  <p-toast key="login"></p-toast>
-  <div class="grid justify-content-first mt-5">
-    <div class="col-12 md:col-6 lg:col-4">
-      <div class="card p-4 shadow-3 border-round-xl">
-        <h2 class="text-center mb-4" style="color:brown;">Login</h2>
+  <!-- DARK OVERLAY -->
+  <div class="vh-100 w-100 bg-dark bg-opacity-75 d-flex align-items-center">
 
-        <form [formGroup]="passwordForm" (ngSubmit)="login()">
+    <div class="container-fluid ps-5">
+  <div class="row justify-content-start">
+    <div class="col-3 col-md-6 col-lg-4">
 
-          <!-- User Name Field -->
-          <div class="field mb-4">
-            <label for="UserName" class="font-bold block mb-2">User Name</label>
-            <input id="UserName" type="text" pInputText formControlName="UserName" placeholder="Enter your UserName"
-              class="w-full" />
-            <small *ngIf="passwordForm.get('UserName')?.touched && passwordForm.get('UserName')?.invalid"
-              class="p-error">
-              User Name is required 
-            </small>
-          </div>
+          <div class="card bg-dark bg-opacity-75 border border-danger shadow-lg text-light rounded-4">
 
-          <!-- Password Field -->
-          <div class="field mb-4">
-            <label for="Passwords" class="font-bold block mb-2">Password</label>
-            <div class="p-inputgroup">
-              <input id="Passwords" [type]="passwordFieldType" pInputText formControlName="Passwords"
-                placeholder="Enter your Password" class="w-full" />
-              <button type="button" pButton
-                icon="{{ passwordFieldType === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash' }}"
-                class="p-button-outlined" (click)="togglePasswordVisibility()"></button>
+            <div class="card-body p-4">
+
+              <h3 class="text-center text-danger fw-bold mb-4">
+                Login
+              </h3>
+
+              <form [formGroup]="passwordForm" (ngSubmit)="login()">
+
+                <!-- USERNAME -->
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-light">User Name</label>
+                  <input type="text" formControlName="UserName" class="form-control bg-dark text-light border-danger"
+                    placeholder="Enter User Name">
+                  <small class="text-danger"
+                    *ngIf="passwordForm.get('UserName')?.touched && passwordForm.get('UserName')?.invalid">
+                    User Name is required
+                  </small>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-light">Password</label>
+
+                  <div class="input-group">
+                    <input [type]="passwordFieldType" formControlName="Passwords"
+                      class="form-control bg-dark text-light border-danger" placeholder="Enter Password">
+
+                    <button type="button" class="btn btn-outline-danger" (click)="togglePasswordVisibility()">
+                      <i class="bi" [ngClass]="passwordFieldType === 'password'
+                         ? 'bi-eye'
+                         : 'bi-eye-slash'"></i>
+                    </button>
+                  </div>
+
+                  <small class="text-danger"
+                    *ngIf="passwordForm.get('Passwords')?.touched && passwordForm.get('Passwords')?.invalid">
+                    Password is required
+                  </small>
+                </div>
+
+                <!-- ROLE -->
+                <div class="mb-4">
+                  <label class="form-label fw-bold text-light">Role</label>
+                  <select formControlName="Role" class="form-select bg-dark text-light border-danger">
+                    <option value="">Select Role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Employee">Employee</option>
+                  </select>
+                  <small class="text-danger"
+                    *ngIf="passwordForm.get('Role')?.touched && passwordForm.get('Role')?.invalid">
+                    Role is required
+                  </small>
+                </div>
+
+                <!-- BUTTONS -->
+                <button type="submit" class="btn btn-danger w-100 fw-bold mb-2">
+                  Login
+                </button>
+
+                <button type="reset" class="btn btn-outline-danger w-100 fw-bold">
+                  Reset
+                </button>
+
+              </form>
+
             </div>
-            <small *ngIf="passwordForm.get('Passwords')?.touched && passwordForm.get('Passwords')?.invalid"
-              class="p-error">
-              Password is required
-            </small>
-          </div>
-          <!-- Role Field -->
-          <div class="field mb-4">
-            <label for="Role" class="font-bold block mb-2">Role</label>
-            <select id="Role" formControlName="Role" class="w-full p-inputtext">
-              <option value="">Select Role</option>
-              <option value="Admin">Admin</option>
-              <option value="Employee">Employee</option>
-            </select>
-            <small *ngIf="passwordForm.get('Role')?.touched && passwordForm.get('Role')?.invalid" class="p-error">
-              Role is required
-            </small>
           </div>
 
-          <!-- Login Button -->
-          <div class="text-center mt-4">
-            <button type="submit" pButton label="Login" class="w-full"></button>
-          </div>
-          <div class="text-center mt-4">
-            <button type="reset" pButton label="Reset" class="w-full"></button>
-          </div>
+        </div>
 
-          
-        </form>
       </div>
     </div>
+
   </div>
 </div>

@@ -1,0 +1,305 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: #2f3e4e;">Employee Salary</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+
+                    <!-- LEFT GROUP -->
+                   <div class="p-toolbar-group-left flex flex-wrap gap-2">
+                        <button pButton label="New" style="border-radius: 10px;"  icon="pi pi-plus" class="mr-2" (click)="Clear()"></button>
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
+                            class="p-button-success" (click)="Save()">
+                            Save
+                        </button>
+
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Update" tooltipPosition="top" class="p-button-danger"
+                            (click)="OpenDailog()">
+                            Update
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to Update the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <p-button pButton type="button" class="p-button-success mr-2" (click)="Update()">
+                                    Update
+                                </p-button>
+                                <p-button pButton type="button" class="p-button-danger mr-2" (click)="CloseDailog()">No
+                                </p-button>
+                            </div>
+                        </p-dialog>
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Delete" tooltipPosition="top"
+                            class="p-button-danger mr-2" (click)="OpenDeleteDailog()">
+                            Delete
+                        </button>
+                        <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true"
+                            showEffect="fade" [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
+                            <span>Are You show You want to delete the Record?</span>
+                            <div
+                                class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
+                                <div>
+                                    <p-button pButton type="button" class="p-button-danger mr-2" (click)="Delete()">
+                                        Delete
+                                    </p-button>
+                                    <p-button pButton type="button" class="p-button-danger mr-2"
+                                        (click)="CloseDeleteDailog()">
+                                        No
+                                    </p-button>
+                                </div>
+                            </div>
+                        </p-dialog>
+                    </div>
+
+                    <div class="p-toolbar-group-right">
+                        <button pButton type="button" style="border-radius: 10px;"  pTooltip="Send Email" tooltipPosition="Send Email" appendTo="body"
+                            class="mr-2" (click)="SendEmail()">
+                            Send Email
+                        </button>
+                    </div>
+                </p-toolbar>
+
+                <form [formGroup]="SalaryValid" autocomplete="off">
+
+                    <div class="grid p-fluid">
+
+                        <!-- LEFT COLUMN -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
+                                        class="form-control" [readOnly]="isupdatemode" (focus)="showmessage()"
+                                        [class.p-filled]="SalaryValid.get('CompanyId')?.value" />
+                                    <label for="CompanyId">Company Id</label>
+                                </span>
+                                <div *ngIf="SalaryValid.get('CompanyId')?.invalid && SalaryValid.get('CompanyId')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Company Id
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Name" formControlName="Name" class="form-control"
+                                        [readOnly]="isupdatemode" (focus)="showmessage()"
+                                        [class.p-filled]="SalaryValid.get('Name')?.value" />
+                                    <label for="Name">Name</label>
+                                </span>
+                                <div *ngIf="SalaryValid.get('Name')?.invalid && SalaryValid.get('Name')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Name
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="LPA" formControlName="LPA" class="form-control"
+                                        [class.p-filled]="SalaryValid.get('LPA')?.value" />
+                                    <label for="LPA">LPA</label>
+                                </span>
+                                <div *ngIf="SalaryValid.get('LPA')?.invalid && SalaryValid.get('LPA')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter LPA
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <p-dropdown formControlName="Year" [options]="year" optionLabel="name"
+                                    optionValue="name" placeholder="Select a Year">
+                                </p-dropdown>
+                                <div *ngIf="SalaryValid.get('Year')?.invalid && SalaryValid.get('Year')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Year
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <p-dropdown formControlName="Monthly" [options]="cities" optionLabel="name"
+                                    optionValue="name" placeholder="Select a Month">
+                                </p-dropdown>
+
+                                <div *ngIf="SalaryValid.get('Monthly')?.invalid && SalaryValid.get('Monthly')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Month
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="Days" formControlName="Days" class="form-control"
+                                        [class.p-filled]="SalaryValid.get('Days')?.value" />
+                                    <label for="Days">Presnt Days</label>
+                                </span>
+                                <div *ngIf="SalaryValid.get('Days')?.invalid && SalaryValid.get('Days')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Presnt Days
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="grid p-fluid">
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="number" pInputText id="Tax" formControlName="Tax" class="form-control"
+                                        readonly [class.p-filled]="SalaryValid.get('Tax')?.value" />
+                                    <label for="Tax"> Tax</label>
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="number" pInputText id="PF" formControlName="PF" class="form-control"
+                                        readonly [class.p-filled]="SalaryValid.get('PF')?.value" />
+                                    <label for="PF"> PF</label>
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="number" pInputText id="HealthInsurance"
+                                        formControlName="HealthInsurance" class="form-control" readonly
+                                        [class.p-filled]="SalaryValid.get('HealthInsurance')?.value" />
+                                    <label for="HealthInsurance">HealthInsurance</label>
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="number" pInputText id="TotalSalaryPerYear"
+                                        formControlName="TotalSalaryPerYear" class="form-control" readonly
+                                        [class.p-filled]="SalaryValid.get('TotalSalaryPerYear')?.value" />
+                                    <label for="TotalSalaryPerYear">TotalSalaryPerYear</label>
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="number" pInputText id="MonthlySalaryEmployee"
+                                        formControlName="MonthlySalaryEmployee" class="form-control" readonly
+                                        [class.p-filled]="SalaryValid.get('MonthlySalaryEmployee')?.value" />
+                                    <label for="MonthlySalaryEmployee">MonthlySalaryEmployee</label>
+                                </span>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="DailyWages" readonly formControlName="DailyWages"
+                                        class="form-control" [class.p-filled]="SalaryValid.get('DailyWages')?.value" />
+                                    <label for="DailyWages">DailyWages</label>
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="number" pInputText id="Salary" formControlName="Salary"
+                                        class="form-control" readonly
+                                        [class.p-filled]="SalaryValid.get('Salary')?.value" />
+                                    <label for="Salary">Salary</label>
+                                </span>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+
+                <p-accordionTab header="StatusEmployee">
+                    <p-table #dt1 [value]="dtSalary" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['Name','CompanyId']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect()" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="CompanyId">CompanyId <p-sortIcon field="CompanyId"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="EmpName">EmpName <p-sortIcon field="Name"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="LPA">LPA <p-sortIcon field="LPA"></p-sortIcon></th>
+                                <th pSortableColumn="Year">Year <p-sortIcon field="Year"></p-sortIcon></th>
+                                <th pSortableColumn="Monthly">Monthly <p-sortIcon field="Monthly"></p-sortIcon></th>
+                                <th pSortableColumn="PF">PF <p-sortIcon field="PF"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="HealthInsurance">HealthInsurance <p-sortIcon
+                                        field="HealthInsurance"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="TotalSalaryPerYear">TotalSalaryPerYear <p-sortIcon
+                                        field="TotalSalaryPerYear"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="MonthlySalaryEmployee">MonthlySalaryEmployee <p-sortIcon
+                                        field="MonthlySalaryEmployee"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="Days">Present Days <p-sortIcon field="Days"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="DailyWages">DailyWages <p-sortIcon field="DailyWages"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="Salary">Salary <p-sortIcon field="Salary"></p-sortIcon></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+                                <td>{{ emp.CompanyId }}</td>
+                                <td>{{ emp.Name }}</td>
+                                <td>{{ emp.LPA }}</td>
+                                <td>{{ emp.Year }}</td>
+                                <td>{{ emp.Monthly }}</td>
+                                <td>{{ emp.PF }}</td>
+
+
+                                <td>{{ emp.HealthInsurance }}</td>
+                                <td>{{ emp.TotalSalaryPerYear }}</td>
+                                <td>{{ emp. MonthlySalaryEmployee}}</td>
+                                <td>{{ emp.Days }}</td>
+                                <td>{{ emp.DailyWages }}</td>
+                                <td>{{ emp.Salary }}</td>
+
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>
