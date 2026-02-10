@@ -1,4 +1,4 @@
-import { Observable, retry } from "rxjs";
+import { BehaviorSubject, Observable, retry } from "rxjs";
 import { environment } from "../../Folder/Environment.prod";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
@@ -11,11 +11,19 @@ import { GatePass, StatusEmployee } from "../Model/Model";
 
 export class MasterStatus {
 
+     private emp = new BehaviorSubject<any[]>([]);
+     status = this.emp.asObservable(); //service state management
+
     constructor(
         private http: HttpClient,
         private auth: AuthenticationService
     ) { }
     private account: string = environment.baseUrl;
+
+
+    setEmployees(data: any[]) {
+    this.emp.next(data);
+  }
 
 
     GetAllStatusEmployee(): Observable<any> {

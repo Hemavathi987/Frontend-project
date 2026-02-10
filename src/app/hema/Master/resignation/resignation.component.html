@@ -1,0 +1,188 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: #2f3e4e;">Employee Resignation</h1>
+            <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
+                <p-toolbar class="p-4 mt-4">
+                    <div class="p-toolbar-group-left flex flex-wrap gap-2">
+                        <!-- New -->
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Serach"
+                            tooltipPosition="top" icon="pi pi-search" class="p-button-success" (click)="Details()">
+                            Serach
+                        </button>
+                        <button pButton label="New" style="border-radius: 10px;" icon="pi pi-plus" class="mr-2"
+                            (click)="Clear()">
+                        </button>
+                        <!-- Save -->
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Save" tooltipPosition="top"
+                            icon="pi pi-check" class="p-button-success" (click)="Save()">
+                            Save
+                        </button>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <button pButton type="button" style="border-radius: 10px;" pTooltip="Resign"
+                            tooltipPosition="top" icon="pi pi-check" class="p-button-success" (click)="ResignDetails()">
+                            Resignation Status
+                        </button>
+                    </div>
+                </p-toolbar>
+
+                <form [formGroup]="Resignform" autocomplete="off">
+                    <div class="grid p-fluid">
+
+                        <!-- Left Column -->
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="CompId" formControlName="CompId"
+                                        class="form-control" [class.p-filled]="Resignform.get('CompId')?.value" />
+                                    <label for="CompId">Company Id</label>
+                                </span>
+                                <div *ngIf="Resignform.get('CompId')?.invalid && Resignform.get('CompId')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter Company Id
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="EmpName" formControlName="EmpName"
+                                        class="form-control" [class.p-filled]="Resignform.get('EmpName')?.value" />
+                                    <label for="EmpName">EmpName</label>
+                                </span>
+                                <div *ngIf="Resignform.get('EmpName')?.invalid && Resignform.get('EmpName')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter EmpName
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="ResignStatus" formControlName="ResignStatus"
+                                        class="form-control" readonly
+                                        [class.p-filled]="Resignform.get('ResignStatus')?.value" />
+                                    <label for="ResignStatus">ResignStatus</label>
+                                </span>
+                                <div *ngIf="Resignform.get('ResignStatus')?.invalid && Resignform.get('ResignStatus')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter ResignStatus
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <input type="text" pInputText id="ResignReason" formControlName="ResignReason"
+                                        class="form-control" [class.p-filled]="Resignform.get('ResignReason')?.value" />
+                                    <label for="ResignReason">ResignReason</label>
+                                </span>
+                                <div *ngIf="Resignform.get('ResignReason')?.invalid && Resignform.get('ResignReason')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter ResignReason
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <span class="p-float-label w-100">
+                                    <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                                        [readonlyInput]="true" formControlName="ResignApplyDate">
+                                    </p-calendar>
+                                    <label for="date">ResignApplyDate</label>
+                                </span>
+                                <div *ngIf="Resignform.get('ResignApplyDate')?.invalid && Resignform.get('ResignApplyDate')?.touched"
+                                    class="text-danger mt-1 fst-normal">
+                                    Please Enter ResignApplyDate
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6">
+                            <div class="mb-3">
+                                <p-calendar dateFormat="dd/mm/yy" placeholder="00/00/0000" [yearNavigator]="true"
+                                    formControlName="ResignApproveDate" inputStyleClass="calendar-readonly-input"
+                                    styleClass="calendar-readonly">
+                                </p-calendar>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <p-dialog header="Leave Status" [(visible)]="showStatusDialog" [modal]="true" [closable]="true">
+                    <div class="text-center p-3">
+                        <h3>Employee: {{ selectedEmpName }}</h3>
+                        <p>Status: <strong>{{ selectedResignStatus }}</strong></p>
+                        <p *ngIf="selectedResignStatus === 'Approved'" style="color:green;">Admine had Approved the
+                            Resignation
+                        </p>
+                        <p *ngIf="selectedResignStatus === 'Rejected'" style="color:red;">Admine had Rejected the Resignation.
+                        </p>
+                        <p *ngIf="selectedResignStatus === 'Pending'" style="color:orange;">Admine still put these Resignation
+                            on pending.
+                        </p>
+                    </div>
+                    <p-footer>
+                        <button pButton type="button" label="Close" (click)="showStatusDialog=false"
+                            class="p-button-secondary"></button>
+                    </p-footer>
+                </p-dialog>
+
+
+                <p-accordionTab header="EmployeeResignDetails">
+                    <p-table #dt1 [value]="dtResign" [paginator]="true" [rows]="5"
+                        [rowsPerPageOptions]="[10,15,20,25,30,40]" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" selectionMode="single"
+                        [(selection)]="SelectRecord" dataKey="Id" [globalFilterFields]="['EmpName','CompId']"
+                        [rowHover]="true" (onRowSelect)="onRowSelect()" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left">
+                                <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
+                                    placeholder="Search" />
+                            </span>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+
+                                <th pSortableColumn="CompId">CompId <p-sortIcon field="CompId"></p-sortIcon> </th>
+                                <th pSortableColumn="EmpName">EmpName <p-sortIcon field="EmpName"></p-sortIcon></th>
+
+                                <th pSortableColumn="ResignStatus">ResignStatus <p-sortIcon
+                                        field="ResignStatus"></p-sortIcon></th>
+                                <th pSortableColumn="ResignReason">ResignReason <p-sortIcon
+                                        field="ResignReason"></p-sortIcon></th>
+                                <th pSortableColumn="ResignApplyDate">ResignApplyDate <p-sortIcon
+                                        field="ResignApplyDate"></p-sortIcon></th>
+                                <th pSortableColumn="ResignApproveDate">ResignApproveDate <p-sortIcon
+                                        field="ResignApproveDate"></p-sortIcon></th>
+
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-emp>
+                            <tr [pSelectableRow]="emp">
+
+                                <td>{{ emp.CompId }}</td>
+                                <td>{{ emp.EmpName }}</td>
+                                <td>{{ emp.ResignStatus }}</td>
+                                <td>{{ emp.ResignReason }}</td>
+                                <td>{{ emp.ResignApplyDate }}</td>
+                                <td>{{ emp.ResignApproveDate }}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>

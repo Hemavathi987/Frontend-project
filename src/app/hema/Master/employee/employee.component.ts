@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToolbarModule } from 'primeng/toolbar';
 import { AccordionModule } from 'primeng/accordion';
@@ -17,27 +17,32 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TooltipModule } from "primeng/tooltip";
 import { Router } from '@angular/router';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CalendarModule } from 'primeng/calendar';
+import { StatusComponent } from '../status/status.component';
 
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [ReactiveFormsModule, ToolbarModule, FileUploadModule, FloatLabelModule, TableModule, CommonModule, AccordionModule, ButtonModule, DialogModule, PaginatorModule, ToastModule, TooltipModule],
+  imports: [ReactiveFormsModule, ToolbarModule, CalendarModule, FileUploadModule, FloatLabelModule, TableModule, CommonModule, AccordionModule, ButtonModule, DialogModule, PaginatorModule, ToastModule, TooltipModule],
   providers: [MessageService, NgxSpinnerService],
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.scss']
 })
-export class EmployeeComponent implements OnInit {
+export class EmployeeComponent implements OnInit,AfterViewInit {
+@Input() emp2: any;      // the object passed from parent
+@Input() showOnlyName: boolean = false; // NEW flag
+
 
   photoBase: string = '';  // Base64 without prefix
   previewUrl: string | ArrayBuffer | null = null;
   photoFileName: string = '';
-  dtEmployee: Employee[] = [];
+  dtEmployee: Employee[] = [];// statae
   dtPhoto: Photo[] = [];
   dtadress: EmployeeAdress[] = [];
   dtStatus: StatusEmployee[] = [];
-  employee: Employee = {};
-  photo!: Photo ;
+  employee1: Employee = {};
+  photo!: Photo;
   displayPopup: boolean = false;
   cols: any[] = [];
   EmployeeForm!: FormGroup;
@@ -54,10 +59,14 @@ export class EmployeeComponent implements OnInit {
     private mastetService: MasterService,
     private router: Router
   ) { }
+  ngAfterViewInit(): void {
+   console.log('Html is paced');
+  }
 
   ngOnInit(): void {
     this.formvalidation();
-
+    if(this.showOnlyName)
+    console.log('Employee from parent:', this.emp2);
     this.getEmployee();
   }
 
@@ -68,9 +77,11 @@ export class EmployeeComponent implements OnInit {
       Name: ['', Validators.required],
       Age: ['', Validators.required],
       Email: ['', Validators.required],
-      
+      DOB: ['', Validators.required],
       PhotoBase: ['', Validators.required]
     });
+    // name: new FormControl('', Validators.required),
+  //email: new FormControl('', [Validators.required, Validators.email]),
   }
 
 
@@ -122,6 +133,16 @@ export class EmployeeComponent implements OnInit {
           life: 3000,
         });
         this.spinner.hide()
+        if (err.status === 403 || err.status === 400) {
+          this.messageService.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Delete.',
+            life: 4000,
+          });
+          return;
+        }
       }
     })
   }
@@ -165,7 +186,7 @@ export class EmployeeComponent implements OnInit {
 
         fd.append("CompanyId", formValue.CompanyId?.toString() || "");
         fd.append("Name", formValue.Name || "");    // <-- MUST be EmpName
-       fd.append('PhotoBase', formValue.PhotoBase); 
+        fd.append('PhotoBase', formValue.PhotoBase);
         this.mastetService.AddPhoto(fd).subscribe({
           next: (res: Photo) => {
             console.log("Photo Saved:", res);
@@ -349,6 +370,7 @@ export class EmployeeComponent implements OnInit {
           detail: err?.error?.Message || 'Something went wrong',
           life: 3000,
         });
+          
       }
     });
   }
@@ -371,6 +393,7 @@ export class EmployeeComponent implements OnInit {
         });
         this.displayUpdate = false;
       },
+
       error: (err) => {
         this.spinner.hide();
         this.messageService.add({
@@ -381,6 +404,16 @@ export class EmployeeComponent implements OnInit {
           life: 3000,
         });
         this.spinner.hide();
+        if (err.status === 403 || err.status === 400) {
+          this.messageService.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot update.',
+            life: 4000,
+          });
+          return;
+        }
       }
 
     })
@@ -401,6 +434,7 @@ export class EmployeeComponent implements OnInit {
             CompanyId: empData.CompanyId,
             Name: empData.Name,
             Age: empData.Age,
+            DOB: empData.DOB,
             Email: empData.Email
           }];
 
@@ -409,7 +443,9 @@ export class EmployeeComponent implements OnInit {
             EmpName: empData.Name,
             PhoneNumber: empData.PhoneNumber,
             Qualification: empData.Qualification,
-            Department: empData.Department
+            Department: empData.Department,
+            Jobrole: empData.Jobrole,
+            DOJ: empData.DOJ
           }];
           this.dtPhoto = [{
             CompanyId: empData.CompanyId,
@@ -463,26 +499,36 @@ export class EmployeeComponent implements OnInit {
           detail: err?.error?.Message || 'Employee does not contain all the information',
           life: 3000,
         });
+          if (err.status === 403 || err.status === 400) {
+          this.messageService.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Get the Data.',
+            life: 4000,
+          });
+          return;
+        }
       },
     });
   }
 
- onPhotoSelect(event: any) {
-  const file: File = event.files[0]; // PrimeNG FileUpload
-  if (!file) return;
+  onPhotoSelect(event: any) {
+    const file: File = event.files[0]; // PrimeNG FileUpload
+    if (!file) return;
 
-  this.photoFileName = file.name;
+    this.photoFileName = file.name;
 
-  // Optional preview
-  this.previewUrl = URL.createObjectURL(file);
+    // Optional preview
+    this.previewUrl = URL.createObjectURL(file);
 
-  // ✅ STORE FILE OBJECT (NOT BASE64)
-  this.EmployeeForm.patchValue({
-    PhotoBase: file
-  });
+    // ✅ STORE FILE OBJECT (NOT BASE64)
+    this.EmployeeForm.patchValue({
+      PhotoBase: file
+    });
 
-  this.EmployeeForm.get('PhotoBase')?.markAsTouched();
-}
+    this.EmployeeForm.get('PhotoBase')?.markAsTouched();
+  }
 }
 
 

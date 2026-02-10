@@ -1,21 +1,22 @@
 <div class="grid container-fluid">
     <div class="col-12">
         <div class="card">
-            <h1 style="text-align: center; color: brown;">GatePass Status</h1>
+           
             <p-toast key='account'></p-toast>
             <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
                 <p-toolbar class="p-4 mt-4">
+                     <h1 style="text-align:end; color:#2f3e4e;">GatePass Approve</h1>
                     <div class="p-toolbar-group-right flex flex-wrap gap-2">
-                        <button pButton type="button" class="p-button-success mr-2" (click)="getGetpass()"
+                        <button pButton type="button" style="border-radius: 10px;"  class=" mr-2" (click)="getGetpass()"
                             label="Employee Status">
                         </button>
 
-                        <button pButton type="button" class="p-button-success mr-2" (click)="OpenDilagApprove()"
+                        <button pButton type="button" style="border-radius: 10px;"  class="p-button-success mr-2" (click)="OpenDilagApprove()"
                             label="Approve">
                         </button>
                         <p-dialog header="Confirm delete record" [(visible)]="aprove" [modal]="true" showEffect="fade"
                             [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
-                            <span>Are You show You want to Approve the Leave?</span>
+                            <span>Are You show You want to Approve the GatePass</span>
                             <div
                                 class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
                                 <div>
@@ -29,13 +30,13 @@
                             </div>
                         </p-dialog>
 
-                        <button pButton type="button" class="p-button-danger mr-2" (click)="OpenDilagReject()"
+                        <button pButton type="button" style="border-radius: 10px;"  class="p-button-danger mr-2" (click)="OpenDilagReject()"
                             label="Reject">
                         </button>
 
                         <p-dialog header="Confirm delete record" [(visible)]="reject" [modal]="true" showEffect="fade"
                             [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
-                            <span>Are You show You want to Reject the Leave?</span>
+                            <span>Are You show You want to Reject the Gate?</span>
                             <div
                                 class="flex flex-column md:flex-row mt-5 md:justify-content-center md:align-items-center">
                                 <div>
@@ -65,7 +66,7 @@
 
                         <ng-template pTemplate="caption">
                             <span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
+                               
                                 <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)"
                                     placeholder="Search" />
                             </span>
@@ -116,7 +117,7 @@
                 </p-accordionTab>
 
                 <div *ngIf="dtGatepass.length === 0" style="text-align:center; padding: 1rem;">
-                    <p>No pending leaves found.</p>
+                    <p>No pending GatePassfound.</p>
                 </div>
             </p-accordion>
         </div>

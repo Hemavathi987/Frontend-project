@@ -37,17 +37,15 @@ export class MasterEmployyAdressService {
         const param = new HttpParams()
             .set('appUserId', this.auth.UserID())
             .set('connName', this.auth.CompConn());
-        return this.http.put(
-            `${this.acount}Update-EmployeeAdress/${Adress.EmpName}/${Adress.CompanyId}`,
-            Adress, {
-            params: param,
-            headers: { 'Content-Type': 'application/json' }
+             return this.http.put(`${this.acount}Update-EmployeeAdress/${Adress.EmpName}/${Adress.CompanyId}`,
+            Adress, {params: param,headers: { 'Content-Type': 'application/json' }
         })
     }
 
-    iddeletemployeeadress(EmpName: string): Observable<any> {
+    iddeletemployeeadress(EmpName: string,CompanyId : number): Observable<any> {
         const params = new HttpParams()
             .set('EmpName', EmpName)
+            .set('CompanyId',CompanyId)
             .set('appUserID', this.auth.UserID())
             .set('ConnName', this.auth.CompConn());
         return this.http.delete(this.acount + 'id-delete-employeeadress', { params });

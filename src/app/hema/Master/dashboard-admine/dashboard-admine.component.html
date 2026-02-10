@@ -1,26 +1,37 @@
-<div style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
-  <!-- Left side buttons -->
-  <div style="display: flex; gap: 10px;">
-    <!-- Admin buttons -->
+<div class="dashboard-container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3 class="logo">HR Dashboard</h3>
+
     <ng-container *ngIf="role === 'admin'">
-      <button (click)="navigate('leaveapprove')"
-        style="background-color: cadetblue; color: white; padding: 6px 12px; border: none; border-radius: 4px;">
+       <button class="menu-btn" (click)="navigate('bio')">
+       Bio Data
+      </button>
+      <button class="menu-btn" (click)="navigate('leaveapprove')">
         Leave Approve
       </button>
 
-      <button (click)="navigate('passapprove')"
-        style="background-color: chocolate; color: white; padding: 6px 12px; border: none; border-radius: 4px;">
+      <button class="menu-btn" (click)="navigate('passapprove')">
         Gate Pass Approve
       </button>
+       <button class="menu-btn" (click)="navigate('resignapprove')">
+        Resignation Approve
+      </button>
+
+      <button class="menu-btn" (click)="navigate('Salary')">
+        Salary
+      </button>
     </ng-container>
+
+    <button class="menu-btn logout" (click)="logout()">
+      Logout
+    </button>
   </div>
 
-  <!-- Logout -->
-  <button (click)="logout()"
-    style="background-color: crimson; color: white; padding: 6px 12px; border: none; border-radius: 4px;">
-    Logout
-  </button>
-</div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
 
-<hr />
-<router-outlet></router-outlet>
+</div>

@@ -1,26 +1,24 @@
-<div class="grid container-fluid">
+<div class="grid container-fluid" *ngIf="!showOnlyName">
   <div class="col-12">
 
     <p-toast key="account"></p-toast>
-    <div class="card">
-      <h1 style="text-align: center; color: brown;">Employee Details</h1>
+    <div class="card" >
+      <h1 style="text-align: center; color: #2f3e4e;">Employee Details</h1>
       <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
 
         <p-toolbar class="p-4 mt-4">
-       
-          <div class="p-toolbar-group-right  flex flex-wrap gap-2">
-
+          <div class="p-toolbar-group-left flex flex-wrap gap-2">
             <!-- New Button -->
-            <button pButton label="New" icon="pi pi-plus" class="mr-2" (click)="clear()">
+            <button pButton label="New" style="border-radius: 10px;" icon="pi pi-plus" class="mr-2" (click)="clear()">
             </button>
             <!-- Save Button -->
-            <button pButton type="button" pTooltip="Save" tooltipPosition="top" icon="pi pi-check"
-              class="p-button-success mr-2" (click)="Save()">
+            <button pButton type="button" style="border-radius: 10px;" pTooltip="Save" tooltipPosition="top"
+              icon="pi pi-check" class="p-button-success mr-2" (click)="Save()">
               Save
             </button>
             <!-- Update -->
-            <button pButton type="button" pTooltip="Update" tooltipPosition="top" class="p-button-danger mr-2"
-              (click)="OpenDilag()">
+            <button pButton type="button" style="border-radius: 10px;" pTooltip="Update" tooltipPosition="top"
+              class="p-button-danger mr-2" (click)="OpenDilag()">
               Update
             </button>
             <p-dialog header="Confirm delete record" [(visible)]="displayUpdate" [modal]="true" showEffect="fade"
@@ -37,14 +35,10 @@
                 </div>
               </div>
             </p-dialog>
-
-
             <!-- Delete Button -->
-            <button pButton type="button" pTooltip="Delete" tooltipPosition="top" class="p-button-warning mr-2"
-              (click)="openDialog()">
+            <button pButton type="button" style="border-radius: 10px;" pTooltip="Delete" tooltipPosition="top"
+              class="p-button-warning mr-2" (click)="openDialog()">
               Delete
-
-
             </button>
             <p-dialog header="Confirm delete record" [(visible)]="displaydelete" [modal]="true" showEffect="fade"
               [style]="{ width: '30vw' }" [breakpoints]="{ '960px': '75vw' }">
@@ -61,22 +55,19 @@
                 </div>
               </div>
             </p-dialog>
+          </div>
+          <div class="p-toolbar-group-right">
+            <!-- ID -->
+            <button pButton type="button" style="border-radius: 10px;" pTooltip="Details" tooltipPosition="top"
+              icon="pi pi-check" class="p-button-success mr-2" (click)="Details()">
+              Check(Id)
+            </button>
 
-            <p-toolbar classstyle="width: 100%;">
-              <div class="p-toolbar-group-right flex justify-content-end w-full">
-                <!-- ID -->
-                <button pButton type="button" pTooltip="Details" tooltipPosition="top" icon="pi pi-check"
-                  class="p-button-success mr-2" (click)="Details()">
-                  Check(Id)
-                </button>
-
-                <!-- Get All Information -->
-                <button pButton type="button" pTooltip="Details" tooltipPosition="top" icon="pi pi-check"
-                  class="p-button-success" (click)="DetailsAllInfo()">
-                  Check(FullEmployeeDetails)
-                </button>
-              </div>
-            </p-toolbar>
+            <!-- Get All Information -->
+            <button pButton type="button" style="border-radius: 10px;" pTooltip="Details" tooltipPosition="top"
+              icon="pi pi-check" class="p-button-success" (click)="DetailsAllInfo()">
+              Check(FullEmployeeDetails)
+            </button>
           </div>
         </p-toolbar>
 
@@ -101,14 +92,17 @@
             Name: {{dtEmployee[0].Name}} <br>
             Company ID: {{dtEmployee[0].CompanyId}} <br>
             Age: {{dtEmployee[0].Age}} <br>
-            Email: {{dtEmployee[0].Email}}
+            Email: {{dtEmployee[0].Email}} <br>
+            DOB:{{dtEmployee[0].DOB}}
           </p>
 
           <h4>Status</h4>
           <p *ngIf="dtStatus.length > 0">
             Phone: {{dtStatus[0].PhoneNumber}} <br>
             Qualification: {{dtStatus[0].Qualification}} <br>
-            Department: {{dtStatus[0].Department}}
+            Department: {{dtStatus[0].Department}} <br>
+            JobRole:{{dtStatus[0].Jobrole}} <br>
+            DOJ:{{dtStatus[0].DOJ}}
           </p>
 
           <h4>Address</h4>
@@ -183,6 +177,21 @@
                 </div>
               </div>
             </div>
+            <div class="col-12 md:col-6">
+              <div class="mb-3">
+                <span class="p-float-label w-100">
+                  <p-calendar [showIcon]="true" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true" [readonlyInput]="true"
+                    formControlName="DOB" >
+                  </p-calendar>
+                  <label for="date">DOB</label>
+                </span>
+                <div *ngIf="EmployeeForm.get('DOB')?.invalid && EmployeeForm.get('DOB')?.touched"
+                  class="text-danger mt-1 fst-normal">
+                  Please Enter DOB
+                </div>
+              </div>
+            </div>
+
 
             <div class="col-12 md:col-6">
               <div class="mb-3">
@@ -215,7 +224,7 @@
 
             <ng-template pTemplate="caption">
               <span class="p-input-icon-left">
-                <i class="pi pi-search"></i>
+
                 <input pInputText type="search" (input)="onGlobalFilter(dt1,$event)" placeholder="Search" />
               </span>
             </ng-template>
@@ -226,6 +235,7 @@
                 <th pSortableColumn="CompanyId">Company Id <p-sortIcon field="CompanyId"></p-sortIcon></th>
                 <th pSortableColumn="Age">Age <p-sortIcon field="Age"></p-sortIcon></th>
                 <th pSortableColumn="Email">Email <p-sortIcon field="Email"></p-sortIcon></th>
+                <th pSortableColumn="DOB">DOB <p-sortIcon field="DOB"></p-sortIcon></th>
               </tr>
             </ng-template>
 
@@ -235,6 +245,7 @@
                 <td>{{ emp.CompanyId }}</td>
                 <td>{{ emp.Age }}</td>
                 <td>{{ emp.Email }}</td>
+                <td>{{ emp.DOB }}</td>
               </tr>
             </ng-template>
           </p-table>
@@ -244,8 +255,8 @@
   </div>
 </div>
 <div style="text-align: right;">
-  <button pButton type="button" pTooltip="Next" tooltipPosition="right" appendTo="body" class="p-button-success mr-2"
-    (click)="Next()">
+  <button pButton type="button" style="border-radius: 10px;" pTooltip="Next" tooltipPosition="right" appendTo="body"
+    class="p-button-success mr-2" (click)="Next()">
     Next
   </button>
 </div>

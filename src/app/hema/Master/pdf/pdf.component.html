@@ -1,90 +1,131 @@
-<div class="grid container-fluid">
+<div class="grid">
     <div class="col-12">
+        <div class="card p-4 shadow-3 border-round-xl" style="min-height:53vh;">
+            <p-toast key="account"></p-toast>
 
-        <p-toast key="account"></p-toast>
-        <div class="card">
-            <h1 style="text-align: center; color: brown;">Report</h1>
+
+            <!-- PAGE TITLE -->
+            <h2 class="text-center text-primary mb-4">Employee Report</h2>
+
+
             <p-accordion [activeIndex]="index" (onTabOpen)="OnTab($event)">
-                <p-toolbar>
 
-                    <form [formGroup]="PdfValid" autocomplete="off">
-                        <div class="grid p-fluid"> <!-- ✅ Must have this wrapper -->
+                <!-- FORM SECTION -->
+                <div class="p-3">
 
-                            <!-- LEFT COLUMN -->
+                    <form [formGroup]="PdfValid" autocomplete="off" class="p-fluid">
+
+                        <div class="grid">
+
+                            <!-- Company ID -->
                             <div class="col-12 md:col-6">
-                                <div class="mb-3">
-                                    <span class="p-float-label w-100">
-                                        <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
-                                            class="form-control" [class.p-filled]="PdfValid.get('CompanyId')?.value" />
-                                        <label for="CompanyId">Company Id</label>
-                                    </span>
-                                    <div *ngIf="PdfValid.get('CompanyId')?.invalid && PdfValid.get('CompanyId')?.touched"
-                                        class="text-danger mt-1 fst-normal">
-                                        Please Enter Company Id
-                                    </div>
-                                </div>
+                                <span class="p-float-label">
+                                    <input pInputText id="CompanyId" formControlName="CompanyId" class="form-control" />
+                                    <label for="CompanyId">Company ID</label>
+                                </span>
+                                <small class="text-danger"
+                                    *ngIf="PdfValid.get('CompanyId')?.invalid && PdfValid.get('CompanyId')?.touched">
+                                    Please enter Company ID
+                                </small>
                             </div>
 
-                            <!-- RIGHT COLUMN -->
+                            <!-- Name -->
                             <div class="col-12 md:col-6">
-                                <div class="mb-3">
-                                    <span class="p-float-label w-100">
-                                        <input type="text" pInputText id="Name" formControlName="Name"
-                                            class="form-control" [class.p-filled]="PdfValid.get('Name')?.value" />
-                                        <label for="Name">Name</label>
-                                    </span>
-                                    <div *ngIf="PdfValid.get('Name')?.invalid && PdfValid.get('Name')?.touched"
-                                        class="text-danger mt-1 fst-normal">
-                                        Please Enter Name
-                                    </div>
-                                </div>
+                                <span class="p-float-label">
+                                    <input pInputText id="Name" class="form-control" formControlName="Name" />
+                                    <label for="Name">Employee Name</label>
+                                </span>
+                                <small class="text-danger"
+                                    *ngIf="PdfValid.get('Name')?.invalid && PdfValid.get('Name')?.touched">
+                                    Please enter Name
+                                </small>
                             </div>
+
                         </div>
+
                     </form>
-                </p-toolbar>
-                <p-toolbar class="p-4 mt-4">
-                    <div class="p-toolbar-group-right  flex flex-wrap gap-2">
-                        <!-- New -->
-                        <button pButton type="button" pTooltip="PDF" tooltipPosition="top" icon="pi pi-check"
-                            class="p-button-success" (click)="PDF()">
-                            PDF
+
+                    <!-- ACTION BUTTON -->
+                   <div class="flex justify-content-start mt-4">
+
+                        <button pButton label="Clear" style="border-radius: 10px;"  class="mr-2" (click)="Clear()"></button>
+                    </div>
+
+                    <div class="flex justify-content-end mt-4">
+                        <button pButton type="button" style="border-radius: 10px;"  icon="pi pi-file-pdf" label="Acknowledgement"
+                            class="p-button-success p-button-rounded" (click)="Acknowledgement()">
                         </button>
                     </div>
-                </p-toolbar>
-                      <div #pdfContent id="pdfContent" class="p-4" >
-                     <img *ngIf="dtPhoto[0]?.PhotoBase" [src]="'data:image/jpeg;base64,' + dtPhoto[0].PhotoBase"
-                        width="120" />
-                     <div  *ngIf="dtEmployee.length > 0">
-                          <h3>Employee Details</h3>
-                    <p><b>Company Id:</b> {{ dtEmployee[0]?.CompanyId }}</p>
-                    <p><b>Name:</b> {{ dtEmployee[0]?.Name }}</p>
-                    <p><b>Age:</b> {{ dtEmployee[0]?.Age }}</p>
-                    <p><b>Email:</b> {{ dtEmployee[0]?.Email }}</p>
-                    </div>
-                    <hr>
-                  <div  *ngIf="dtStatus.length > 0">
-                   
-                    <p><b>Phone:</b> {{ dtStatus[0]?.PhoneNumber }}</p>
-                    <p><b>Qualification:</b> {{ dtStatus[0]?.Qualification }}</p>
-                    <p><b>Department:</b> {{ dtStatus[0]?.Department }}</p>
-                    </div>
-                    <hr>
-
-                    <div *ngIf="dtAdress.length > 0">
-                        <h3>Address</h3>
-                        <p>{{ dtAdress[0].Address1 }}</p>
-                        <p>{{ dtAdress[0].City }} - {{ dtAdress[0].Pincode }}</p>
-                        <p>{{ dtAdress[0].State }}, {{ dtAdress[0].Country }}</p>
-                    </div>
-
-                    <hr>
-
-                    <!-- PHOTO -->
-                  
                 </div>
-                <!-- PDF CONTENT -->
+
+                <p-dialog header="Employee Full Details" [(visible)]="displayViewPopup" [modal]="true"
+                    [style]="{ width: '720px' }" [closable]="true">
+
+                    <!-- PDF CONTENT -->
+                    <div id="pdfContent" class="p-4">
+
+                        <!-- PHOTO ROW -->
+                        <div class="flex gap-3 mb-4">
+                            <div *ngIf="dtPhoto.length > 0 && dtPhoto[0]?.PhotoBase">
+                                <img [src]="'data:image/png;base64,' + dtPhoto[0].PhotoBase" width="150" height="150"
+                                    style="border-radius: 8px;" />
+                            </div>
+                            <div *ngIf="dtPhoto.length === 0 || !dtPhoto[0]?.PhotoBase">
+                                <p>No photo available</p>
+                            </div>
+                        </div>
+
+                        <!-- BASIC INFO -->
+                        <div *ngIf="dtEmployee.length > 0" class="mb-3">
+                            <h4>Basic Info</h4>
+                            <p>
+                                Name: {{ dtEmployee[0].Name }} <br>
+                                Company ID: {{ dtEmployee[0].CompanyId }} <br>
+                                Age: {{ dtEmployee[0].Age }} <br>
+                                Email: {{ dtEmployee[0].Email }} <br>
+                                DOB: {{dtEmployee[0].DOB}}
+                            </p>
+                        </div>
+                        <hr>
+
+                        <!-- STATUS -->
+                        <div *ngIf="dtStatus.length > 0" class="mb-3">
+                            <h4>Status</h4>
+                            <p>
+                                Phone: {{ dtStatus[0].PhoneNumber }} <br>
+                                Qualification: {{ dtStatus[0].Qualification }} <br>
+                                Department: {{ dtStatus[0].Department }}  <br>
+                                DOJ: {{dtStatus[0].DOJ}} <br>
+                                JobRole:{{dtStatus[0].Jobrole}}
+                            </p>
+                        </div>
+
+                        <hr>
+
+                        <!-- ADDRESS -->
+                        <div *ngIf="dtAdress.length > 0">
+                            <h4>Address</h4>
+                            <p>
+                                {{ dtAdress[0].Address1 }},
+                                {{ dtAdress[0].Address2 }},
+                                {{ dtAdress[0].Address3 }} <br>
+                                {{ dtAdress[0].City }},
+                                {{ dtAdress[0].State }},
+                                {{ dtAdress[0].Country }} - {{ dtAdress[0].Pincode }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <div class="flex justify-content-end mt-4">
+                        <button pButton type="button" style="border-radius: 10px;"  icon="pi pi-file-pdf" label="Generate PDF"
+                            class="p-button-success" (click)="generatePDF()">
+                        </button>
+                    </div>
+                </p-dialog>
             </p-accordion>
-           
+
 
         </div>
     </div>

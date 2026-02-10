@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { Table, TableModule, TableRowSelectEvent } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { MasterStatus } from '../../Service/Status';
+import { DividerModule } from 'primeng/divider';
 import { MasterService } from '../../Service/Service';
 import { Employee, EmployeeAdress, Photo, StatusEmployee } from '../../Model/Model';
 import html2pdf from 'html2pdf.js';
@@ -23,7 +23,7 @@ import html2pdf from 'html2pdf.js';
 @Component({
   selector: 'app-pdf',
   standalone: true,
-  imports: [ToastModule, TableModule, CalendarModule, FloatLabelModule, PaginatorModule, AccordionModule, CommonModule, ToolbarModule, ReactiveFormsModule, DialogModule, ButtonDirective, TooltipModule],
+  imports: [ToastModule, TableModule,DividerModule, CalendarModule, FloatLabelModule, PaginatorModule, AccordionModule, CommonModule, ToolbarModule, ReactiveFormsModule, DialogModule, ButtonDirective, TooltipModule],
   providers: [MessageService, NgxSpinnerService],
   templateUrl: './pdf.component.html',
   styleUrl: './pdf.component.scss'
@@ -35,11 +35,24 @@ export class PDFComponent implements OnInit {
   dtPhoto: Photo[] = [];
   dtStatus: StatusEmployee[] = [];
   index: any;
-  PdfValid!: FormGroup
+  PdfValid!: FormGroup;
+  displayViewPopup : boolean =false;
 
   ngOnInit(): void {
     this.formvalidation();
     
+  }
+
+  Clear()
+  {
+    this.PdfValid.reset();
+  }
+
+  Acknowledgement()
+  {
+
+   if(!this.validateBasicFields()) return;
+    this.PDF();   
   }
 
   constructor(
@@ -64,29 +77,50 @@ export class PDFComponent implements OnInit {
 
 generatePDF() {
   const element = document.getElementById('pdfContent');
-
   if (!element) return;
 
-  html2pdf()
-    .from(element)
-    .set({
-      margin: 10,
-      filename: 'Employee_Report.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    })
-    .save();
-}
+  const options: any = {
+    margin: 10,
+    filename: 'Employee_Report.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] } // ✅ works
+  };
+  html2pdf().from(element).set(options).save();
+  }
+
+validateBasicFields(): boolean {
+
+    const companyId = this.PdfValid.get('CompanyId');//This returns the FormControl object itself.
+    const empName = this.PdfValid.get('Name');
+    //You can then check its state (valid/invalid, touched/dirty) or call methods like markAsTouched().
+    //FormControl object
+    companyId?.markAsTouched();
+    empName?.markAsTouched();
 
 
+    if (companyId?.invalid || empName?.invalid)//empty,custom validator that fails,Control is disabled,pattern validator that fails
+    {
+      this.messageservice.add({
+        key: 'account',
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Company Id and Employee Name are required'
+      });
+      return false;
+    }
+    return true;
+  }
+
+  
 
   PDF() {
     const { CompanyId, Name } = this.PdfValid.value
     this.spinner.show();
     this.mastetService.AlredycreatedfullemployeeInformation(CompanyId, Name).subscribe({
       next: (data: any) => {
-        console.log('🟢 Full API raw response:', data);
+        console.log('full API raw response:', data);
         const res = data?.body ? data.body : data;
 
         if (res?.Status?.toLowerCase?.() === 'success' && res?.Data) {
@@ -96,7 +130,8 @@ generatePDF() {
             CompanyId: empData.CompanyId,
             Name: empData.Name,
             Age: empData.Age,
-            Email: empData.Email
+            Email: empData.Email,
+            DOB:empData.DOB
           }];
           this.dtPhoto = [{
             CompanyId: empData.CompanyId,
@@ -109,7 +144,9 @@ generatePDF() {
             EmpName: empData.Name,
             PhoneNumber: empData.PhoneNumber,
             Qualification: empData.Qualification,
-            Department: empData.Department
+            Department: empData.Department,
+            DOJ:empData.DOJ,
+            Jobrole:empData.Jobrole
           }];
 
           this.dtAdress = [{
@@ -126,10 +163,8 @@ generatePDF() {
             Country: empData.Country,
             UpdatedDate: empData.UpdatedDate
           }];
-                setTimeout(() => {
-            this.generatePDF();
-            this.spinner.hide();
-          }, 300);
+
+          this.displayViewPopup=true;
 
           this.messageservice.add({
             key: 'account',
@@ -138,6 +173,7 @@ generatePDF() {
             detail: 'Employee contain all the information',
             life: 3000
           });
+
           //this.displayPopup = true;
         } else {
           console.warn('⚠️ Unexpected response format:', res);
@@ -162,6 +198,16 @@ generatePDF() {
           detail: err?.error?.Message || 'Employee does not contain all the information',
           life: 3000,
         });
+           if (err.status === 403 || err.status === 400) {
+          this.messageservice.add({
+            key: 'account',
+            severity: 'warn',
+            summary: 'Access Denied',
+            detail: 'You are no longer an employee. Cannot Pdf.',
+            life: 4000,
+          });
+          return;
+        }
       },
     });
   }

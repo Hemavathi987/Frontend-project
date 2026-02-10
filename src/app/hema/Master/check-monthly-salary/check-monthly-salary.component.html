@@ -1,0 +1,156 @@
+<div class="grid container-fluid">
+    <div class="col-12">
+        <p-toast key="account"></p-toast>
+        <div class="card">
+            <h1 style="text-align: center; color: #2f3e4e;">Employee Salary</h1>
+        </div>
+        <p-accordion [(activeIndex)]="activeIndex">
+           <p-toolbar class="p-4 mt-4">
+                <div class="p-toolbar-group-left flex flex-wrap gap-2">
+                    <button pButton type="button" style="border-radius: 10px;"  pTooltip="get" tooltipPosition="top" class="p-button-success" icon="pi pi-search"
+                        (click)="Next()">
+                        Search
+                    </button>
+                </div>
+                <div class="p-toolbar-group-right">
+                    <button pButton type="button" style="border-radius: 10px;" 
+                    
+                    icon="pi pi-file-pdf" label="Acknowledgement" class="p-button-success"
+                        (click)="openAcknowledgement()">
+                    </button>
+                </div>
+            </p-toolbar>
+
+            <form [formGroup]="SalaryValid" autocomplete="off">      
+                <div class="grid p-fluid">
+                    <!-- LEFT COLUMN -->
+                    <div class="col-12 md:col-6">
+                        <div class="mb-3">
+                            <span class="p-float-label w-100">
+                                <input type="text" pInputText id="CompanyId" formControlName="CompanyId"
+                                    class="form-control" [class.p-filled]="SalaryValid.get('CompanyId')?.value" />
+                                <label for="CompanyId">Company Id</label>
+                            </span>
+                            <div *ngIf="SalaryValid.get('CompanyId')?.invalid && SalaryValid.get('CompanyId')?.touched"
+                                class="text-danger mt-1 fst-normal">
+                                Please Enter Company Id
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="mb-3">
+                            <span class="p-float-label w-100">
+                                <input type="text" pInputText id="Name" formControlName="Name" class="form-control"
+                                    [class.p-filled]="SalaryValid.get('Name')?.value" />
+                                <label for="Name">Name</label>
+                            </span>
+                            <div *ngIf="SalaryValid.get('Name')?.invalid && SalaryValid.get('Name')?.touched"
+                                class="text-danger mt-1 fst-normal">
+                                Please Enter Name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <p-dialog header="Employee Full Details" [(visible)]="displayViewPopup" [modal]="true"
+                [style]="{ width: '720px' }" [closable]="true">
+
+                <!-- PDF CONTENT -->
+                <div id="pdfContent" class="p-4">
+
+                    <!-- PHOTO ROW -->
+
+                    <!-- BASIC INFO -->
+                    <div *ngIf="dtSalary.length > 0" class="mb-3">
+                        <h4>Basic Info</h4>
+                        <p>
+                            Name: {{ dtSalary[0].Name }} <br>
+                            Company ID: {{ dtSalary[0].CompanyId }} <br>
+                            Year: {{ dtSalary[0].Year }} <br>
+                            Month: {{ dtSalary[0].Monthly }} <br>
+                            LPA: {{ dtSalary[0].LPA }} <br>
+                            TotalSalaryPerYear: {{ dtSalary[0].TotalSalaryPerYear }}<br>
+                            Tax : {{dtSalary[0].Tax}}<br>
+                            PF : {{dtSalary[0].PF}}<br>
+                            HealthInsurance : {{dtSalary[0].HealthInsurance}}<br>
+                            MonthlySalaryEmployee : {{dtSalary[0].MonthlySalaryEmployee}}<br>
+                            Working Days : {{dtSalary[0].Days}}<br>
+                            DailyWages : {{dtSalary[0].DailyWages}}<br>
+                            Salary: {{dtSalary[0].Salary}}<br>
+
+                        </p>
+                    </div>
+                    <hr>
+                </div>
+
+                <!-- BUTTON -->
+                <div class="flex justify-content-end mt-4">
+                    <button pButton type="button" icon="pi pi-file-pdf" label="Generate PDF" class="p-button-success"
+                        (click)="generatePDF()">
+                    </button>
+                </div>
+            </p-dialog>
+
+
+            <p-accordionTab header="Salary Details">
+            <p-table #dt1 [value]="dtSalary" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[10,15,20,25,30,40]"
+                [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                selectionMode="single" [(selection)]="SelectRecord" dataKey="Id"
+                [globalFilterFields]="['Name','CompanyId']" [rowHover]="true" (onRowSelect)="onRowSelect($event)"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="CompanyId">CompanyId <p-sortIcon field="CompanyId"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="EmpName">EmpName <p-sortIcon field="Name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="LPA">LPA <p-sortIcon field="LPA"></p-sortIcon></th>
+                        <th pSortableColumn="Year">Year <p-sortIcon field="Year"></p-sortIcon></th>
+                        <th pSortableColumn="Monthly">Monthly <p-sortIcon field="Monthly"></p-sortIcon></th>
+                        <th pSortableColumn="PF">PF <p-sortIcon field="PF"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="HealthInsurance">HealthInsurance <p-sortIcon
+                                field="HealthInsurance"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="TotalSalaryPerYear">TotalSalaryPerYear <p-sortIcon
+                                field="TotalSalaryPerYear"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="MonthlySalaryEmployee">MonthlySalaryEmployee <p-sortIcon
+                                field="MonthlySalaryEmployee"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="Days">Present Days <p-sortIcon field="Days"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="DailyWages">DailyWages <p-sortIcon field="DailyWages"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="Salary">Salary <p-sortIcon field="Salary"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-emp>
+                    <tr [pSelectableRow]="emp">
+                        <td>{{ emp.CompanyId }}</td>
+                        <td>{{ emp.Name }}</td>
+                        <td>{{ emp.LPA }}</td>
+                        <td>{{ emp.Year }}</td>
+                        <td>{{ emp.Monthly }}</td>
+                        <td>{{ emp.PF }}</td>
+
+
+                        <td>{{ emp.HealthInsurance }}</td>
+                        <td>{{ emp.TotalSalaryPerYear }}</td>
+                        <td>{{ emp. MonthlySalaryEmployee}}</td>
+                        <td>{{ emp.Days }}</td>
+                        <td>{{ emp.DailyWages }}</td>
+                        <td>{{ emp.Salary }}</td>
+
+
+                    </tr>
+                </ng-template>
+            </p-table>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>

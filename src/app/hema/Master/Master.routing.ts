@@ -15,6 +15,12 @@ import { BarComponent } from "./bar/bar.component";
 import { ComparisionComponent } from "./comparision/comparision.component";
 import { StatusComponent } from "./status/status.component";
 import { PDFComponent } from "./pdf/pdf.component";
+import { SalaryCalculatorComponent } from "./salary-calculator/salary-calculator.component";
+import { CheckMonthlySalaryComponent } from "./check-monthly-salary/check-monthly-salary.component";
+import { ResignationComponent } from "./resignation/resignation.component";
+import { CheckResignationComponent } from "./check-resignation/check-resignation.component";
+import { BioDataComponent } from "./bio-data/bio-data.component";
+import { KKKKKKComponent } from "../../kkkkkk/kkkkkk.component";
 
 
 // const routes: Routes = [
@@ -53,8 +59,9 @@ const routes: Routes = [
       {path:'bar',component:BarComponent},
       {path:'comparision',component:ComparisionComponent},
       {path:'status',component:StatusComponent},
+      {path:'checksalary',component:CheckMonthlySalaryComponent},
+      {path:'resign',component:ResignationComponent},
       { path: '', redirectTo: 'employee', pathMatch: 'full' },
-      
     ],
   },
 
@@ -69,7 +76,11 @@ const routes: Routes = [
     children: [
       { path: 'leaveapprove', component: LeaveApproveComponent },
       { path: 'passapprove', component: GatepassAprroveComponent },
-      { path: '', redirectTo: 'leaveapprove', pathMatch: 'full' },
+       { path: 'resignapprove', component: CheckResignationComponent },
+      {path: 'Salary',component:SalaryCalculatorComponent},
+      {path:'bio',component:BioDataComponent},
+       {path:'kkk',component:KKKKKKComponent},
+      { path: '', redirectTo: 'bio', pathMatch: 'full' },
     ],
   },
 ];

@@ -8,6 +8,7 @@ import { Employee, Photo } from "../Model/Model";
 import { EmployeeAdressComponent } from "../Master/employee-adress/employee-adress.component";
 @Injectable({
   providedIn: 'root',
+  
 })
 export class MasterService {
   constructor(
@@ -15,6 +16,8 @@ export class MasterService {
 
     private auth: AuthenticationService
   ) { }
+
+
   private account: string = environment.baseUrl;
 
 
@@ -77,6 +80,10 @@ export class MasterService {
 
   AlredycreatedfullemployeeInformation(CompId: number, EmpName: string): Observable<any> {
     const url = `${this.account}Employee/Alredy-created-full-employeeInformation-${CompId}-${EmpName}`;
+    return this.http.get(url, { headers: { 'Content-Type': 'application/json' } });
+  }
+  EmailAlredycreatedfullemployeeInformation(CompId: number, EmpName: string): Observable<any> {
+    const url = `${this.account}Employee/Email-created-full-employeeInformation-${CompId}-${EmpName}`;
     return this.http.get(url, { headers: { 'Content-Type': 'application/json' } });
   }
 
