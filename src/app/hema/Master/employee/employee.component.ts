@@ -20,6 +20,15 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CalendarModule } from 'primeng/calendar';
 import { StatusComponent } from '../status/status.component';
 
+// ngOnInit() {
+//   this.http.get('/api/employees')
+//     .subscribe(data => {
+//       this.employees = data;
+//     });
+// }
+
+ // name: new FormControl('', Validators.required),
+  //email: new FormControl('', [Validators.required, Validators.email]),
 
 @Component({
   selector: 'app-employee',
@@ -80,8 +89,7 @@ export class EmployeeComponent implements OnInit,AfterViewInit {
       DOB: ['', Validators.required],
       PhotoBase: ['', Validators.required]
     });
-    // name: new FormControl('', Validators.required),
-  //email: new FormControl('', [Validators.required, Validators.email]),
+   
   }
 
 

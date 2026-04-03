@@ -154,6 +154,7 @@ handleLeaveSaved(data: any) {
   Update() {
     this.spinner.show();
     this.servicemodule.UpdateGatepass(this.gatepassform.value).subscribe({
+      
       next: (data) => {
         this.Clear();
         this.getpass();

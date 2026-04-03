@@ -1,4 +1,4 @@
-import { Observable, retry } from "rxjs";
+import { BehaviorSubject, Observable, retry } from "rxjs";
 import { environment } from "../../Folder/Environment.prod";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
@@ -13,7 +13,12 @@ export class MasterGatePass {
     constructor(private http: HttpClient,
         private auth: AuthenticationService
     ) { }
+    // private gatepass=new BehaviorSubject(<GatePass>[]);
+    // public gatepass$=this.gatepass.asObservable;
+
+
     private account: string = environment.baseUrl
+
 
     allgateall(): Observable<any> {
         const param = new HttpParams()

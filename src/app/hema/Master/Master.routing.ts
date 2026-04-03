@@ -68,7 +68,7 @@ const routes: Routes = [
   // ✅ ADMIN DASHBOARD (SEPARATE)
   {
     path: 'admine',
-    loadComponent: () =>
+    loadComponent: () =>// lazyloading
       import('./dashboard-admine/dashboard-admine.component').then(
         (m) => m.DashboardAdmineComponent
       ),

@@ -5,7 +5,7 @@ import { MasterEmployyAdressService } from '../../Service/employee.adress.servic
 import { ToastModule } from 'primeng/toast';
 import { Employee, EmployeeAdress, EmployeeUpdateDTO, Photo, StatusEmployee } from '../../Model/Model';
 import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccordionModule } from 'primeng/accordion';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonDirective, Button } from "primeng/button";
@@ -93,7 +93,17 @@ export class EmployeeAdressComponent implements OnInit {
       Country: ['']
     });
   }
+//User types input in HTML
 
+//formControlName connects that input to a FormControl in TS
+
+//Value is stored in FormControl (inside TS file)
+
+//Angular runs validators defined in TS
+
+//Status becomes VALID / INVALID
+
+//UI updates automatically
 
 
 
@@ -115,6 +125,19 @@ export class EmployeeAdressComponent implements OnInit {
 
     });
   }
+  //Correct flow:
+
+//User types input in HTML
+
+//ngModel captures the value
+
+//Angular creates a form model internally
+
+//Value is synced to TS variable (two-way binding)
+
+//Validators written in HTML attributes run
+
+//Angular updates status and UI
 
   OnTab(num: any) {
     this.index = num.index;

@@ -11,9 +11,7 @@ import {
   throwError
 } from 'rxjs';
 
-/* =======================
-   GLOBAL STATE
-   ======================= */
+
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
@@ -26,9 +24,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const refreshTokenExpiry = localStorage.getItem('RefreshTokenExpiryTime');
   const role = localStorage.getItem('role'); // Admin | Employee
 
-  /* =======================
-     SKIP AUTH FOR THESE APIs
-     ======================= */
+  
   if (
     req.url.includes('Add-Password') ||
     req.url.includes('refresh-tocken')
@@ -170,3 +166,14 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
+//Security
+
+//How does Angular prevent XSS?
+
+//What is DOM sanitization?
+
+//How do you secure routes?
+
+//Where do you store JWT tokens?
+
+//How do you prevent CSRF?

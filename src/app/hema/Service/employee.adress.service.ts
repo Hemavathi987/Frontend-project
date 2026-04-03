@@ -10,6 +10,16 @@ import { EmployeeAdress, EmployeeUpdateDTO } from "../Model/Model";
     providedIn: "root"
 })
 
+//API (short-lived) → subscribe → BehaviorSubject.next(data) → components receive data
+//In service state management:
+
+//We call the API using HttpClient (this returns a short-lived Observable)
+
+//We subscribe and get the data
+
+//We store that data in a BehaviorSubject using .next(data)
+
+//Multiple components subscribe to that BehaviorSubject and receive the same data
 export class MasterEmployyAdressService {
     constructor
         (private auth: AuthenticationService,
